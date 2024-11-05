@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: default
+
+resources:
+  - ../../base
+
+patches:
+  - patch: |-
+      - op: replace
+        path: "/spec/kafka/acls/0/topic"
+        value: "altinn.instance.*"
+      - op: add
+        path: "/spec/url/basePath"
+        value: "/beta"
+      - op: replace
+        path: "/spec/ingress/basePath"
+        value: "/beta/api"
+    target:
+      kind: Application
+      name: fint-altinn-service
