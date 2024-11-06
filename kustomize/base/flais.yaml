@@ -30,6 +30,8 @@ spec:
   env:
     - name: JAVA_TOOL_OPTIONS
       value: '-XX:+ExitOnOutOfMemoryError -Xmx1840M'
+  onePassword:
+    itemPath: 'vaults/aks-beta-vault/items/altinn-service'
   resources:
     limits:
       memory: "2048Mi"
