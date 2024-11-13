@@ -7,7 +7,6 @@ import no.fintlabs.kafka.event.EventProducerRecord;
 import no.fintlabs.kafka.event.topic.EventTopicNameParameters;
 import no.fintlabs.kafka.event.topic.EventTopicService;
 import org.springframework.stereotype.Service;
-import org.springframework.util.concurrent.ListenableFuture;
 
 @Slf4j
 @Service
@@ -19,7 +18,10 @@ public class InstancePublisherService {
 
     public InstancePublisherService(EventProducerFactory eventProducerFactory, EventTopicService eventTopicService) {
         this.instanceExampleEventProducer = eventProducerFactory.createProducer(Object.class);
-        this.eventTopicNameParameters = EventTopicNameParameters.builder().eventName("agderfk-no.instance").build();
+        this.eventTopicNameParameters = EventTopicNameParameters.builder()
+                .orgId("agderfk.no")
+                .eventName("altinn-instance")
+                .build();
         eventTopicService.ensureTopic(eventTopicNameParameters, 0);
     }
 
