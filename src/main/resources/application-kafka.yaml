@@ -1,10 +1,10 @@
 fint:
   kafka:
     topic:
-      #org-id: ${fint.org-id}
+      org-id: fintlabs-no
       domain-context: drosje
     application-id: ${fint.application-id}
 spring:
   kafka:
     consumer:
-      group-id: ${fint.org-id}-${fint.application-id}
+      group-id: fintlabs-no-${fint.application-id}
