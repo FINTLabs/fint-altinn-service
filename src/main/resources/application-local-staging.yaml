@@ -1,0 +1,15 @@
+fint:
+  org-id: fintlabs.no
+  kafka:
+    default-replicas: 1
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+server:
+  port: 8080
+logging:
+  level:
+    no.fintlabs.sourceapplicationInstanceController: DEBUG

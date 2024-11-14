@@ -13,50 +13,21 @@ import reactor.core.publisher.Mono;
 public class AltinnInstanceService {
 
     private final WebClient webClient;
-    private final MaskinportenService maskinportenService;
-    private final InstancePublisherService instancePublisherService;
 
-    public AltinnInstanceService(WebClient webClient, MaskinportenService maskinportenService, InstancePublisherService instancePublisherService) {
-        this.webClient = webClient;
-        this.maskinportenService = maskinportenService;
-        this.instancePublisherService = instancePublisherService;
+    public AltinnInstanceService(WebClient altinnwWebClient) {
+        this.webClient = altinnwWebClient;
     }
 
     public Mono<String> getInstances() {
-
-        instancePublisherService.publish(new AltinnInstance("123", "456"));
-
-        return maskinportenService.getBearerToken()
-                .flatMap(this::exchangeToken)
-                .flatMap(this::fetchAltinnInstances);
+        return webClient.get()
+                .uri("/storage/api/v1/instances?appId=vigo/drosjesentral")
+                .retrieve().bodyToMono(String.class);
     }
 
     public Mono<String> getInstance(String instanceId) {
-        return maskinportenService.getBearerToken()
-                .flatMap(this::exchangeToken)
-                .flatMap(token -> fetchAltinnInstance(instanceId, token));
-    }
-
-    private Mono<String> fetchAltinnInstances(String token) {
         return webClient.get()
-                .uri("https://platform.tt02.altinn.no/storage/api/v1/instances?appId=vigo/drosjesentral")
-                .header("Authorization", "Bearer " + token)
+                .uri("/storage/api/v1/instances/" + instanceId + "?appId=vigo/drosjesentral")
                 .retrieve().bodyToMono(String.class);
-    }
-
-    private Mono<String> fetchAltinnInstance(String instanceId, String token) {
-        return webClient.get()
-                .uri("https://platform.tt02.altinn.no/storage/api/v1/instances/" + instanceId + "?appId=vigo/drosjesentral")
-                .header("Authorization", "Bearer " + token)
-                .retrieve().bodyToMono(String.class);
-    }
-
-    private Mono<String> exchangeToken(String bearToken) {
-        return webClient.get()
-                .uri("https://platform.tt02.altinn.no/authentication/api/v1/exchange/maskinporten")
-                .header("Authorization", bearToken)
-                .retrieve()
-                .bodyToMono(String.class);
     }
 
 }

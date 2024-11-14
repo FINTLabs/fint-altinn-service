@@ -1,11 +1,7 @@
 package no.fintlabs.altinn.kafka;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fintlabs.kafka.event.EventProducer;
-import no.fintlabs.kafka.event.EventProducerFactory;
-import no.fintlabs.kafka.event.EventProducerRecord;
-import no.fintlabs.kafka.event.topic.EventTopicNameParameters;
-import no.fintlabs.kafka.event.topic.EventTopicService;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -14,27 +10,15 @@ import java.time.Duration;
 @Service
 public class InstancePublisherService {
 
-    private final EventProducer<Object> instanceExampleEventProducer;
-    private final EventTopicNameParameters eventTopicNameParameters;
+    private final KafkaTemplate<String, AltinnInstance> kafkaTemplate;
 
-    public InstancePublisherService(EventProducerFactory eventProducerFactory, EventTopicService eventTopicService) {
-        this.instanceExampleEventProducer = eventProducerFactory.createProducer(Object.class);
-        this.eventTopicNameParameters = EventTopicNameParameters.builder()
-                .orgId("fintlabs-no")
-                .eventName("altinn-instance")
-                .domainContext("drosje")
-                .build();
-        log.info("Ensuring event topic: {}", eventTopicNameParameters);
-        eventTopicService.ensureTopic(eventTopicNameParameters, Duration.ofDays(1).toMillis());
+    public InstancePublisherService(KafkaTemplate<String, AltinnInstance> kafkaTemplate) {
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public void publish(AltinnInstance altinnInstance) {
         log.info("Publishing altinn instance: {}", altinnInstance);
-        instanceExampleEventProducer.send(
-                EventProducerRecord.builder()
-                        .topicNameParameters(eventTopicNameParameters)
-                        .value(altinnInstance)
-                        .build());
+        kafkaTemplate.send("altinn-instances", "123", altinnInstance);
     }
 
 }
