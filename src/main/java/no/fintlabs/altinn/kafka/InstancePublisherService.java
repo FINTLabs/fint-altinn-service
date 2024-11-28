@@ -8,25 +8,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class InstancePublisherService {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, AltinnInstance> kafkaTemplate;
+    private final KafkaTopicNameProperties topics;
 
-    public InstancePublisherService(KafkaTemplate<String, String> kafkaTemplate) {
+    public InstancePublisherService(KafkaTemplate<String, AltinnInstance> kafkaTemplate, KafkaTopicNameProperties topics) {
         this.kafkaTemplate = kafkaTemplate;
+        this.topics = topics;
     }
 
     public void publish(AltinnInstance altinnInstance) {
-        log.info("Publishing altinn instance: {}", altinnInstance);
+        String topicName = topics.getAltinnInstanceCreated();
+        log.info("Publishing altinn instance to topic {}: {}", topicName, altinnInstance);
         kafkaTemplate
-                .send("altinn.instance.created", "123", "test")
+                .send(topicName, "123", altinnInstance)
                 .thenAccept(result ->
-                        log.info("💃 Published altinn instance: {}", result))
+                        log.info("💃 Published altinn instance to topic {}: {}", topicName, result))
                 .exceptionally(e -> {
-                    log.error("🤦 Failed to publish to topic=altinn.instance.created", e);
+                    log.error("🤦 Failed to publish to topic={}", topicName, e);
                     if (e.getCause() != null) {
                         log.error("Cause: {}", e.getCause().getMessage());
                     }
                     return null;
                 });
     }
-
 }

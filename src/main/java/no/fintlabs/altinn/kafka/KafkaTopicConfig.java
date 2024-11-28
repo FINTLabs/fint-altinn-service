@@ -9,9 +9,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class KafkaTopicConfig {
 
+    private final KafkaTopicNameProperties topics;
+
+    public KafkaTopicConfig(KafkaTopicNameProperties topics) {
+        this.topics = topics;
+    }
+
     @Bean
-    NewTopic createAltinnInstancesTopic(){
-        log.info("Creating Kafka topic: altinn.instance.created");
-        return new NewTopic("altinn.instance.created", 1, (short) 1);
+    NewTopic createAltinnInstancesTopic() {
+        String topicName = topics.getAltinnInstanceCreated();
+        log.info("Creating Kafka topic: {}", topicName);
+        return new NewTopic(topicName, 1, (short) 1);
     }
 }

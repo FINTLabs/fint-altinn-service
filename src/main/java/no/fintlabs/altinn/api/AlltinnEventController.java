@@ -23,7 +23,7 @@ public class AlltinnEventController {
         Mono<String> instances = altinnInstanceService.getInstances();
         instances.doOnSuccess(inst ->
                         instancePublisherService
-                                .publish(new AltinnInstance("111", "x", inst)))
+                                .publish(new AltinnInstance("111")))
                 .block();
         return instances;
     }

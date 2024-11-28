@@ -1,3 +1,8 @@
+fint:
+  kafka:
+    topic:
+      altinn-instance-created: fintlabs-no.altinn.entity.instance-received
+
 spring:
   kafka:
     properties:
@@ -9,7 +14,3 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-      properties:
-        security.protocol: SSL
-        enable.idempotence: true
-        acks: all
