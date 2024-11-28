@@ -15,4 +15,3 @@ public class KafkaTopicConfig {
         return new NewTopic("altinn-instances", 1, (short) 1);
     }
 }
-auto.create.topics.enable=true
