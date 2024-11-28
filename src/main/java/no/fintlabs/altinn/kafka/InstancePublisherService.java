@@ -17,11 +17,11 @@ public class InstancePublisherService {
     public void publish(AltinnInstance altinnInstance) {
         log.info("Publishing altinn instance: {}", altinnInstance);
         kafkaTemplate
-                .send("altinn-instances", "123", "test")
+                .send("altinn.instance.created", "123", "test")
                 .thenAccept(result ->
                         log.info("💃 Published altinn instance: {}", result))
                 .exceptionally(e -> {
-                    log.error("🤦 Failed to publish to topic=altinn-instances", e);
+                    log.error("🤦 Failed to publish to topic=altinn.instance.created", e);
                     if (e.getCause() != null) {
                         log.error("Cause: {}", e.getCause().getMessage());
                     }
