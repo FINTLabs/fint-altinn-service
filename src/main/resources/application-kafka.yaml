@@ -4,6 +4,8 @@ fint:
       org-id: fintlabs-no
       domain-context: drosje
     application-id: ${fint.application-id}
+    admin:
+      enabled: true
 spring:
   kafka:
     consumer:

@@ -4,21 +4,26 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-
 @Slf4j
 @Service
 public class InstancePublisherService {
 
-    private final KafkaTemplate<String, AltinnInstance> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public InstancePublisherService(KafkaTemplate<String, AltinnInstance> kafkaTemplate) {
+    public InstancePublisherService(KafkaTemplate<String, String> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public void publish(AltinnInstance altinnInstance) {
         log.info("Publishing altinn instance: {}", altinnInstance);
-        kafkaTemplate.send("altinn-instances", "123", altinnInstance);
+        kafkaTemplate
+                .send("altinn-instances", "123", "test")
+                .thenAccept(result ->
+                        log.info("💃 Published altinn instance: {}", result))
+                .exceptionally(e -> {
+                    log.error("🤦 Failed to publish altinn instance", e);
+                    return null;
+                });
     }
 
 }
