@@ -9,7 +9,7 @@ patches:
   - patch: |-
       - op: replace
         path: "/spec/kafka/acls/0/topic"
-        value: "altinn.instance.*"
+        value: "*.altinn.*"
       - op: add
         path: "/spec/url/basePath"
         value: "/beta"
