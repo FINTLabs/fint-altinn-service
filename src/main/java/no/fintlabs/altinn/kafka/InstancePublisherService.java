@@ -21,7 +21,10 @@ public class InstancePublisherService {
                 .thenAccept(result ->
                         log.info("💃 Published altinn instance: {}", result))
                 .exceptionally(e -> {
-                    log.error("🤦 Failed to publish altinn instance", e);
+                    log.error("🤦 Failed to publish to topic=altinn-instances", e);
+                    if (e.getCause() != null) {
+                        log.error("Cause: {}", e.getCause().getMessage());
+                    }
                     return null;
                 });
     }

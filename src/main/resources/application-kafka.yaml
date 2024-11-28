@@ -1,17 +1,15 @@
-fint:
-  kafka:
-    topic:
-      org-id: fintlabs-no
-      domain-context: drosje
-    application-id: ${fint.application-id}
 spring:
   kafka:
     properties:
         security.protocol: SSL
     consumer:
-      group-id: fintlabs-no_arkiv_${fint.application-id}
+      group-id: fintlabs-no_arkiv_fint-altinn-service
     admin:
       enabled: true
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        security.protocol: SSL
+        enable.idempotence: true
+        acks: all
