@@ -6,6 +6,8 @@ fint:
     application-id: ${fint.application-id}
 spring:
   kafka:
+    properties:
+        security.protocol: SSL
     consumer:
       group-id: fintlabs-no-${fint.application-id}
     admin:
