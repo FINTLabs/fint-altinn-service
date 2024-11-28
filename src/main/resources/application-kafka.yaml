@@ -4,12 +4,12 @@ fint:
       org-id: fintlabs-no
       domain-context: drosje
     application-id: ${fint.application-id}
-    admin:
-      enabled: true
 spring:
   kafka:
     consumer:
       group-id: fintlabs-no-${fint.application-id}
+    admin:
+      enabled: true
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
