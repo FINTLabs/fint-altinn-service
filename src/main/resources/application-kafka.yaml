@@ -9,7 +9,7 @@ spring:
     properties:
         security.protocol: SSL
     consumer:
-      group-id: fintlabs-no-${fint.application-id}
+      group-id: fintlabs-no_arkiv_${fint.application-id}
     admin:
       enabled: true
     producer:
