@@ -35,7 +35,7 @@ public class MaskinportenService {
 
     public Mono<String> getBearerToken() {
         try {
-            if (!StringUtils.hasLength(bearerToken) && !isJwtExpired()){
+            if (StringUtils.hasLength(bearerToken) && !isJwtExpired()){
                 log.debug("🔑 Use existing token.");
                 return Mono.just(bearerToken);
             }

@@ -8,15 +8,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class InstancePublisherService {
 
-    private final KafkaTemplate<String, AltinnInstance> kafkaTemplate;
+    private final KafkaTemplate<String, KafkaAltinnInstance> kafkaTemplate;
     private final KafkaTopicNameProperties topics;
 
-    public InstancePublisherService(KafkaTemplate<String, AltinnInstance> kafkaTemplate, KafkaTopicNameProperties topics) {
+    public InstancePublisherService(KafkaTemplate<String, KafkaAltinnInstance> kafkaTemplate, KafkaTopicNameProperties topics) {
         this.kafkaTemplate = kafkaTemplate;
         this.topics = topics;
     }
 
-    public void publish(AltinnInstance altinnInstance) {
+    public void publish(KafkaAltinnInstance altinnInstance) {
         String topicName = topics.getAltinnInstanceCreated();
         log.info("Publishing altinn instance to topic {}: {}", topicName, altinnInstance);
         kafkaTemplate

@@ -1,4 +1,4 @@
-package no.fintlabs.altinn.service;
+package no.fintlabs.altinn.altinn;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fintlabs.altinn.maskinporten.MaskinportenService;
