@@ -9,10 +9,7 @@ import lombok.Getter;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ApplicationAdresse {
     @XmlElement
-    private String adresselinje1;
-    
-    @XmlElement
-    private String adresselinje2;
+    private String adresse;
     
     @XmlElement
     private String postnummer;

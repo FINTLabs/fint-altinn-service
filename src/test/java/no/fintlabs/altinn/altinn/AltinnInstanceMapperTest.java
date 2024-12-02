@@ -31,11 +31,17 @@ class AltinnInstanceMapperTest {
         ApplicationModel applicationModel = new ApplicationModel();
         setField(applicationModel, "virksomhet", virksomhet);
 
+        ApplicationDagligLeder dagligLeder = new ApplicationDagligLeder();
+        setField(dagligLeder, "fodselsnummer", "12345678901");
+        setField(dagligLeder, "fornavn", "Ola");
+        setField(dagligLeder, "etternavn", "Nordmann");
+        setField(applicationModel, "dagligLeder", dagligLeder);
+
         KafkaAltinnInstance result = AltinnInstanceMapper.mapToAltinnInstance(altinnInstance, applicationModel);
 
         assertThat(result.getInstanceId()).isEqualTo("instance-123");
         assertThat(result.getOrganizationNumber()).isEqualTo("123456789");
-        assertThat(result.getCountyCode()).isEqualTo("50");
+        assertThat(result.getCountyNumber()).isEqualTo("50");
         assertThat(result.getCountyName()).isEqualTo("Trøndelag");
     }
 

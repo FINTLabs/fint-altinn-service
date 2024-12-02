@@ -10,4 +10,7 @@ import lombok.Getter;
 public class ApplicationKontaktinformasjon {
     @XmlElement
     private String epostadresse;
+
+    @XmlElement
+    private String telefonnummer;
 }
