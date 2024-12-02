@@ -1,0 +1,17 @@
+fint:
+  org-id: fintlabs.no
+server:
+  port: 8080
+logging:
+  level:
+    no.fintlabs.sourceapplicationInstanceController: DEBUG
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    properties:
+      security.protocol: PLAINTEXT
+server:
+  port: 8080
+logging:
+  level:
+    no.fintlabs.sourceapplicationInstanceController: DEBUG

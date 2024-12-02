@@ -6,7 +6,7 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,9 +19,9 @@ import java.time.Clock;
 import java.util.Date;
 import java.util.UUID;
 
-@Configuration
+@Component
 @Slf4j
-public class MaskinportenConfiguration {
+public class MaskinportenService {
 
     public static final long JWT_EXPIRATION_OFFSET = 5000;
     public static final long JWT_EXPIRATION_TIME = 120000;
@@ -29,13 +29,13 @@ public class MaskinportenConfiguration {
     private long tokenExpirationTime = 0;
     private String bearerToken;
 
-    public MaskinportenConfiguration(MaskinportenProperties maskinportenProperties) {
+    public MaskinportenService(MaskinportenProperties maskinportenProperties) {
         this.maskinportenProperties = maskinportenProperties;
     }
 
     public Mono<String> getBearerToken() {
         try {
-            if (!StringUtils.hasLength(bearerToken) && !isJwtExpired()){
+            if (StringUtils.hasLength(bearerToken) && !isJwtExpired()){
                 log.debug("🔑 Use existing token.");
                 return Mono.just(bearerToken);
             }

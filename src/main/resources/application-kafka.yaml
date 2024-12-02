@@ -1,0 +1,16 @@
+fint:
+  kafka:
+    topic:
+      altinn-instance-created: fintlabs-no.altinn.entity.instance-received
+
+spring:
+  kafka:
+    properties:
+        security.protocol: SSL
+    consumer:
+      group-id: fintlabs-no_arkiv_fint-altinn-service
+    admin:
+      enabled: true
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
