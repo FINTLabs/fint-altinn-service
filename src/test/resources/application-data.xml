@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Datamodell
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <virksomhet>
+        <organisasjonsnummer>212621072</organisasjonsnummer>
+        <organisasjonsnavn>GJENNOMSIKTIG OPPLAGT APE</organisasjonsnavn>
+        <organisasjonsform>FLI</organisasjonsform>
+        <forretningsadresse>
+            <adresse>c/o Împulsivemosjonell Berømt Neve, Torggata 44</adresse>
+            <postnummer>2317</postnummer>
+            <poststed>HAMAR</poststed>
+        </forretningsadresse>
+        <postadresse />
+        <fylke>
+            <fylkesnummer>34</fylkesnummer>
+            <fylkesnavn>Innlandet</fylkesnavn>
+        </fylke>
+        <kommune>
+            <kommunenummer>3403</kommunenummer>
+            <kommunenavn>HAMAR</kommunenavn>
+        </kommune>
+        <kontaktinformasjon>
+            <epostadresse>cepheus@gacruxancha.no</epostadresse>
+        </kontaktinformasjon>
+    </virksomhet>
+    <dagligLeder>
+        <fodselsnummer>01874997664</fodselsnummer>
+        <fornavn>SNAR</fornavn>
+        <etternavn>TREFF</etternavn>
+        <kontaktinformasjon />
+    </dagligLeder>
+    <bekreftelseOkonomiOgVandel>true</bekreftelseOkonomiOgVandel>
+    <bekreftelseKjentMedSentralensPlikter>true</bekreftelseKjentMedSentralensPlikter>
+    <bekreftelseSentralePlikter9d>true</bekreftelseSentralePlikter9d>
+    <virksomhetFlereFylker>nei</virksomhetFlereFylker>
+</Datamodell>

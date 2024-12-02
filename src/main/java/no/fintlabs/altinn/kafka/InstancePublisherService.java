@@ -1,6 +1,7 @@
 package no.fintlabs.altinn.kafka;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.altinn.model.kafka.KafkaAltinnInstance;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 

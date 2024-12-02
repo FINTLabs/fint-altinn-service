@@ -1,0 +1,118 @@
+{
+  "id": "51482496/2908c658-a7d6-4613-8148-eca08564708b",
+  "instanceOwner": {
+    "partyId": "51482496",
+    "organisationNumber": "212621072"
+  },
+  "appId": "vigo/drosjesentral",
+  "org": "vigo",
+  "selfLinks": {
+    "platform": "https://platform.tt02.altinn.no/storage/api/v1/instances/51482496/2908c658-a7d6-4613-8148-eca08564708b"
+  },
+  "visibleAfter": "2024-09-17T10:10:11.9382012Z",
+  "process": {
+    "started": "2024-09-17T10:10:11.6646445Z",
+    "startEvent": "StartEvent_1",
+    "ended": "2024-09-17T10:11:55.4013267Z",
+    "endEvent": "EndEvent_1"
+  },
+  "status": {
+    "isArchived": true,
+    "archived": "2024-09-17T10:11:55.4013267Z",
+    "isSoftDeleted": false,
+    "isHardDeleted": false,
+    "readStatus": "Read"
+  },
+  "data": [
+    {
+      "id": "7144b9a7-97aa-4312-b951-89dc2432845d",
+      "instanceGuid": "2908c658-a7d6-4613-8148-eca08564708b",
+      "dataType": "Datamodell",
+      "contentType": "application/xml",
+      "blobStoragePath": "vigo/drosjesentral/2908c658-a7d6-4613-8148-eca08564708b/data/7144b9a7-97aa-4312-b951-89dc2432845d",
+      "selfLinks": {
+        "platform": "https://platform.tt02.altinn.no/storage/api/v1/instances/51482496/2908c658-a7d6-4613-8148-eca08564708b/data/7144b9a7-97aa-4312-b951-89dc2432845d"
+      },
+      "size": 1181,
+      "locked": true,
+      "isRead": true,
+      "tags": [],
+      "fileScanResult": "NotApplicable",
+      "created": "2024-09-17T10:10:12.7911442Z",
+      "createdBy": "1291876",
+      "lastChanged": "2024-09-17T10:11:55.44044Z",
+      "lastChangedBy": "1291876"
+    },
+    {
+      "id": "1fe30c3d-1f21-4cd5-af47-54267d2dde63",
+      "instanceGuid": "2908c658-a7d6-4613-8148-eca08564708b",
+      "dataType": "FileUpload-24vgOE",
+      "filename": "drosjesentral.regjeringen.jpg",
+      "contentType": "image/jpeg",
+      "blobStoragePath": "vigo/drosjesentral/2908c658-a7d6-4613-8148-eca08564708b/data/1fe30c3d-1f21-4cd5-af47-54267d2dde63",
+      "selfLinks": {
+        "platform": "https://platform.tt02.altinn.no/storage/api/v1/instances/51482496/2908c658-a7d6-4613-8148-eca08564708b/data/1fe30c3d-1f21-4cd5-af47-54267d2dde63"
+      },
+      "size": 164160,
+      "locked": true,
+      "isRead": true,
+      "tags": [],
+      "fileScanResult": "NotApplicable",
+      "created": "2024-09-17T10:11:14.599908Z",
+      "createdBy": "1291876",
+      "lastChanged": "2024-09-17T10:11:14.599908Z",
+      "lastChangedBy": "1291876"
+    },
+    {
+      "id": "1ce244bd-dc1c-4ed6-96e6-adab8080d6f8",
+      "instanceGuid": "2908c658-a7d6-4613-8148-eca08564708b",
+      "dataType": "FileUpload-hSzXhQ",
+      "filename": "drosjesentral.regjeringen.jpg",
+      "contentType": "image/jpeg",
+      "blobStoragePath": "vigo/drosjesentral/2908c658-a7d6-4613-8148-eca08564708b/data/1ce244bd-dc1c-4ed6-96e6-adab8080d6f8",
+      "selfLinks": {
+        "platform": "https://platform.tt02.altinn.no/storage/api/v1/instances/51482496/2908c658-a7d6-4613-8148-eca08564708b/data/1ce244bd-dc1c-4ed6-96e6-adab8080d6f8"
+      },
+      "size": 164160,
+      "locked": true,
+      "isRead": true,
+      "tags": [],
+      "fileScanResult": "NotApplicable",
+      "created": "2024-09-17T10:11:18.2683603Z",
+      "createdBy": "1291876",
+      "lastChanged": "2024-09-17T10:11:18.26836Z",
+      "lastChangedBy": "1291876"
+    },
+    {
+      "id": "c974eec0-9c89-42b6-a743-f85b0470db8d",
+      "instanceGuid": "2908c658-a7d6-4613-8148-eca08564708b",
+      "dataType": "ref-data-as-pdf",
+      "filename": "Drosjesentral.pdf",
+      "contentType": "application/pdf",
+      "blobStoragePath": "vigo/drosjesentral/2908c658-a7d6-4613-8148-eca08564708b/data/c974eec0-9c89-42b6-a743-f85b0470db8d",
+      "selfLinks": {
+        "platform": "https://platform.tt02.altinn.no/storage/api/v1/instances/51482496/2908c658-a7d6-4613-8148-eca08564708b/data/c974eec0-9c89-42b6-a743-f85b0470db8d"
+      },
+      "size": 96920,
+      "locked": false,
+      "isRead": true,
+      "tags": [],
+      "fileScanResult": "NotApplicable",
+      "references": [
+        {
+          "value": "Task_1",
+          "relation": "GeneratedFrom",
+          "valueType": "Task"
+        }
+      ],
+      "created": "2024-09-17T10:12:00.3603997Z",
+      "createdBy": "1291876",
+      "lastChanged": "2024-09-17T10:12:00.3604Z",
+      "lastChangedBy": "1291876"
+    }
+  ],
+  "created": "2024-09-17T10:10:11.9382012Z",
+  "createdBy": "1291876",
+  "lastChanged": "2024-09-17T10:12:00.507633Z",
+  "lastChangedBy": "1291876"
+}

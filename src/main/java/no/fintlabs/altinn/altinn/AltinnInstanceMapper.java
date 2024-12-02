@@ -1,8 +1,8 @@
 package no.fintlabs.altinn.altinn;
 
+import no.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.altinn.altinn.model.AltinnInstance;
 import no.fintlabs.altinn.altinn.model.ApplicationModel;
-import no.fintlabs.altinn.kafka.KafkaAltinnInstance;
 
 
 public class AltinnInstanceMapper {

@@ -1,10 +1,10 @@
 package no.fintlabs.altinn.api;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.altinn.altinn.AltinnInstanceMapper;
 import no.fintlabs.altinn.altinn.model.AltinnInstanceModel;
 import no.fintlabs.altinn.altinn.model.ApplicationModel;
-import no.fintlabs.altinn.kafka.KafkaAltinnInstance;
 import no.fintlabs.altinn.kafka.InstancePublisherService;
 import no.fintlabs.altinn.altinn.AltinnInstanceService;
 import org.springframework.web.bind.annotation.*;
