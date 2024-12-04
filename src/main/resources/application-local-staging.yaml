@@ -10,8 +10,3 @@ spring:
     bootstrap-servers: localhost:9092
     properties:
       security.protocol: PLAINTEXT
-server:
-  port: 8080
-logging:
-  level:
-    no.fintlabs.sourceapplicationInstanceController: DEBUG
