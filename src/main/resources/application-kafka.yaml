@@ -7,8 +7,6 @@ spring:
   kafka:
     properties:
         security.protocol: SSL
-    consumer:
-      group-id: fintlabs-no_arkiv_fint-altinn-service
     admin:
       enabled: true
     producer:

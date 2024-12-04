@@ -21,7 +21,7 @@ public class InstancePublisherService {
         String topicName = topics.getAltinnInstanceCreated();
         log.info("Publishing altinn instance to topic {}: {}", topicName, altinnInstance);
         kafkaTemplate
-                .send(topicName, "123", altinnInstance)
+                .send(topicName, altinnInstance.getInstanceId(), altinnInstance)
                 .thenAccept(result ->
                         log.info("💃 Published altinn instance to topic {}: {}", topicName, result))
                 .exceptionally(e -> {
