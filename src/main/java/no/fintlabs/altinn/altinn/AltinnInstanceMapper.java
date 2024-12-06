@@ -9,6 +9,8 @@ import java.util.Optional;
 
 public class AltinnInstanceMapper {
 
+    public static final String EMTPY_STRING = "";
+
     public static KafkaAltinnInstance mapToAltinnInstance(AltinnInstance instanceFromAltinn, ApplicationModel applicationModel) {
         return KafkaAltinnInstance.builder()
                 .instanceId(instanceFromAltinn.getId())
@@ -21,42 +23,42 @@ public class AltinnInstanceMapper {
 
                 .companyEmail(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(null))
+                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMTPY_STRING))
 
                 .companyPhone(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(null))
+                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMTPY_STRING))
 
                 .companyAdressStreet(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getForretningsadresse)
-                        .map(ApplicationAdresse::getAdresse).orElse(null))
+                        .map(ApplicationAdresse::getAdresse).orElse(EMTPY_STRING))
                 .companyAdressPostcode(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getForretningsadresse)
-                        .map(ApplicationAdresse::getPostnummer).orElse(null))
+                        .map(ApplicationAdresse::getPostnummer).orElse(EMTPY_STRING))
                 .companyAdressPostplace(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getForretningsadresse)
-                        .map(ApplicationAdresse::getPoststed).orElse(null))
+                        .map(ApplicationAdresse::getPoststed).orElse(EMTPY_STRING))
 
                 .postalAdressStreet(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getPostadresse)
-                        .map(ApplicationAdresse::getAdresse).orElse(null))
+                        .map(ApplicationAdresse::getAdresse).orElse(EMTPY_STRING))
                 .postalAdressPostcode(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getPostadresse)
-                        .map(ApplicationAdresse::getPostnummer).orElse(null))
+                        .map(ApplicationAdresse::getPostnummer).orElse(EMTPY_STRING))
                 .postalAdressPostplace(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getPostadresse)
-                        .map(ApplicationAdresse::getPoststed).orElse(null))
+                        .map(ApplicationAdresse::getPoststed).orElse(EMTPY_STRING))
 
                 .managerSocialSecurityNumber(applicationModel.getDagligLeder().getFodselsnummer())
                 .managerFirstName(applicationModel.getDagligLeder().getFornavn())
                 .managerLastName(applicationModel.getDagligLeder().getEtternavn())
-                
+
                 .managerEmail(Optional.ofNullable(applicationModel.getDagligLeder())
                         .map(ApplicationDagligLeder::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(null))
+                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMTPY_STRING))
                 .managerPhone(Optional.ofNullable(applicationModel.getDagligLeder())
                         .map(ApplicationDagligLeder::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(null))
+                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMTPY_STRING))
 
                 .build();
     }
