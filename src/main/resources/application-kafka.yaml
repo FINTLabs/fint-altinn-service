@@ -1,7 +1,7 @@
 fint:
   kafka:
     topic:
-      altinn-instance-created: bfk-no.altinn.entity.instance-received
+      altinn-instance-created: bfk-no.altinn.event.instance-received
 
 spring:
   kafka:
