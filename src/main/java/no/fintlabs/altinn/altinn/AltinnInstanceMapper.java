@@ -3,7 +3,7 @@ package no.fintlabs.altinn.altinn;
 import no.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.altinn.altinn.model.*;
 
-import javax.swing.text.html.Option;
+import java.util.Map;
 import java.util.Optional;
 
 
@@ -14,12 +14,16 @@ public class AltinnInstanceMapper {
     public static KafkaAltinnInstance mapToAltinnInstance(AltinnInstance instanceFromAltinn, ApplicationModel applicationModel) {
         return KafkaAltinnInstance.builder()
                 .instanceId(instanceFromAltinn.getId())
+                .fintOrgId(orgIdMapper(applicationModel.getVirksomhet().getFylke().getFylkesnummer()))
 
                 .organizationNumber(instanceFromAltinn.getInstanceOwner().getOrganisationNumber())
                 .organizationName(applicationModel.getVirksomhet().getOrganisasjonsnavn())
 
                 .countyNumber(applicationModel.getVirksomhet().getFylke().getFylkesnummer())
                 .countyName(applicationModel.getVirksomhet().getFylke().getFylkesnavn())
+
+                .municipalityNumber(applicationModel.getVirksomhet().getKommune().getKommunenummer())
+                .municipalityName(applicationModel.getVirksomhet().getKommune().getKommunenavn())
 
                 .companyEmail(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKontaktinformasjon)
@@ -61,5 +65,24 @@ public class AltinnInstanceMapper {
                         .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMTPY_STRING))
 
                 .build();
+    }
+
+    private static String orgIdMapper(String fylkesnummer) {
+        return Map.ofEntries(
+                Map.entry("11", "rogfk.no"),
+                Map.entry("15", "mrfylke.no"),
+                Map.entry("18", "nfk.no"),
+                Map.entry("31", "ofk.no"),
+                Map.entry("32", "afk.no"),
+                Map.entry("33", "bfk.no"),
+                Map.entry("34", "innlandetfylke.no"),
+                Map.entry("39", "vestfoldfylke.no"),
+                Map.entry("40", "telemarkfylke.no"),
+                Map.entry("42", "agderfk.no"),
+                Map.entry("46", "vlfk.no"),
+                Map.entry("50", "trondelagfylke.no"),
+                Map.entry("55", "tromsfylke.no"),
+                Map.entry("56", "ffk.no")
+        ).getOrDefault(fylkesnummer, "");
     }
 }
