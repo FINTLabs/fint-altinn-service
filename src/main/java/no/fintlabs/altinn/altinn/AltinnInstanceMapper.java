@@ -22,8 +22,12 @@ public class AltinnInstanceMapper {
                 .countyNumber(applicationModel.getVirksomhet().getFylke().getFylkesnummer())
                 .countyName(applicationModel.getVirksomhet().getFylke().getFylkesnavn())
 
-                .municipalityNumber(applicationModel.getVirksomhet().getKommune().getKommunenummer())
-                .municipalityName(applicationModel.getVirksomhet().getKommune().getKommunenavn())
+                .municipalityNumber(Optional.ofNullable(applicationModel.getVirksomhet())
+                        .map(ApplicationVirksomhet::getKommune)
+                        .map(ApplicationKommune::getKommunenummer).orElse(EMTPY_STRING))
+                .municipalityName(Optional.ofNullable(applicationModel.getVirksomhet())
+                        .map(ApplicationVirksomhet::getKommune)
+                        .map(ApplicationKommune::getKommunenavn).orElse(EMTPY_STRING))
 
                 .companyEmail(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKontaktinformasjon)
