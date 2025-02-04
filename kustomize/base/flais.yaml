@@ -21,6 +21,8 @@ spec:
     acls:
       - permission: admin
         topic: 'no-permission'
+  database:
+    database: arkiv
   url:
     hostname: altinn.novari.no
     basePath: "/api"

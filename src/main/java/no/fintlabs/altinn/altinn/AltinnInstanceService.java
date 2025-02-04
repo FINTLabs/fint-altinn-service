@@ -1,6 +1,7 @@
 package no.fintlabs.altinn.altinn;
 
 import lombok.extern.slf4j.Slf4j;
+import no.fintlabs.altinn.altinn.model.AltinnInstance;
 import no.fintlabs.altinn.altinn.model.AltinnInstanceModel;
 import no.fintlabs.altinn.altinn.model.ApplicationModel;
 import org.springframework.http.MediaType;
@@ -15,7 +16,6 @@ import reactor.core.publisher.Mono;
 public class AltinnInstanceService {
 
     private final WebClient webClient;
-    //private final WebClient webClientXml;
 
     public AltinnInstanceService(WebClient altinnwWebClient) {
         this.webClient = altinnwWebClient;
@@ -27,13 +27,12 @@ public class AltinnInstanceService {
                 .retrieve().bodyToMono(AltinnInstanceModel.class);
     }
 
-    public Mono<ApplicationModel> getApplicationData(Mono<AltinnInstanceModel> altinnInstanceModelMono) {
-        return altinnInstanceModelMono.flatMap(altinnInstanceModel -> {
-
-            String uri = altinnInstanceModel.getInstances().getFirst()
-                    .getData().stream()
-                    .filter(data -> data.getDataType().equals("Datamodell")).findFirst()
-                    .get().getSelfLinks().get("platform");
+    public Mono<ApplicationModel> getApplicationData(AltinnInstance altinnInstance) {
+        String uri = altinnInstance.getData().stream()
+                    .filter(data -> data.getDataType().equals("Datamodell"))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("No matching Datamodell in instance"))
+                    .getSelfLinks().get("platform");
 
             return webClient.mutate()
                     .exchangeStrategies(ExchangeStrategies.builder()
@@ -45,7 +44,6 @@ public class AltinnInstanceService {
                     .accept(MediaType.APPLICATION_XML)
                     .retrieve()
                     .bodyToMono(ApplicationModel.class);
-        });
     }
 
     public Mono<String> getInstance(String instanceId) {
