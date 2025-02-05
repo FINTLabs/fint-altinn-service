@@ -11,8 +11,8 @@ spring:
       ddl-auto: update
   datasource:
     driver-class-name: org.postgresql.Driver
+    url: ${fint.database.url}
     username: ${fint.database.username}
+    password: ${fint.database.password}
     hikari:
       schema: ${fint.database.username}
-    url: ${fint.database.url}
-    password: ${fint.database.password}
