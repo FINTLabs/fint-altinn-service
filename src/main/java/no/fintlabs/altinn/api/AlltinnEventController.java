@@ -37,28 +37,39 @@ public class AlltinnEventController {
     @PostMapping("/instances")
     public void getAltinnInstances() {
         altinnInstanceService.getInstances()
-                .flatMapMany(altinnInstanceModel -> Flux.fromIterable(altinnInstanceModel.getInstances()))
+                .flatMapMany(Flux::fromIterable)
                 .filter(this::isNew)
-                .map(altinnInstance -> {
-                    log.info("New instance: {}", altinnInstance.getId());
-
-                    Mono<ApplicationModel> applicationData = altinnInstanceService.getApplicationData(altinnInstance);
-
-                    Mono.zip(Mono.just(altinnInstance), applicationData)
-                            .doOnSuccess(publishAndSave())
-                            .doOnError(throwable -> log.error("Error: ", throwable))
-                            .subscribe(tuple ->
-                                    log.info("Instance: {}, Datamodell XML: {}",
-                                            tuple.getT1().getId(), tuple.getT2()));
-                    return applicationData;
-                })
+                .map(this::processInstance)
                 .subscribe();
 
     }
 
-    private boolean isNew(AltinnInstance altinnInstanses) {
+    @PostMapping("/instance/{partyId}/{instanceId}")
+    public void getAltinnInstance(@PathVariable String partyId, @PathVariable String instanceId) {
+        altinnInstanceService.getInstance(partyId.concat("/").concat(instanceId))
+                .filter(this::isNew)
+                .map(this::processInstance)
+                .subscribe();;
+    }
+
+    private Mono<ApplicationModel> processInstance(AltinnInstance altinnInstance) {
+        log.info("New instance: {}", altinnInstance.getId());
+
+        Mono<ApplicationModel> applicationData = altinnInstanceService.getApplicationData(altinnInstance);
+
+        Mono.zip(Mono.just(altinnInstance), applicationData)
+                .doOnSuccess(publishAndSave())
+                .doOnError(throwable -> log.error("Error: ", throwable))
+                .subscribe(tuple ->
+                        log.info("Instance: {}, Datamodell XML: {}",
+                                tuple.getT1().getId(), tuple.getT2()));
+
+        return applicationData;
+    }
+
+    private boolean isNew(AltinnInstance altinnInstanse) {
         return altinnRepository.findAllInstances().stream()
-                .noneMatch(instance -> instance.getInstanceId().equals(altinnInstanses.getId()));
+                .noneMatch(instance -> instance.getInstanceId().equals(altinnInstanse.getId()));
     }
 
     private Consumer<Tuple2<AltinnInstance, ApplicationModel>> publishAndSave() {
@@ -76,8 +87,5 @@ public class AlltinnEventController {
         };
     }
 
-    @PostMapping("/instance/{partyId}/{instanceId}")
-    public Mono<String> getAltinnInstance(@PathVariable String partyId, @PathVariable String instanceId) {
-        return altinnInstanceService.getInstance(partyId.concat("/").concat(instanceId));
-    }
+
 }

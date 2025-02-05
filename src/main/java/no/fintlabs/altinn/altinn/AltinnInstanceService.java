@@ -11,6 +11,8 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class AltinnInstanceService {
@@ -21,17 +23,18 @@ public class AltinnInstanceService {
         this.webClient = altinnwWebClient;
     }
 
-    public Mono<AltinnInstanceModel> getInstances() {
+    public Mono<List<AltinnInstance>> getInstances() {
         return webClient.get()
                 .uri("/storage/api/v1/instances?appId=vigo/drosjesentral&status.isArchived=true")
-                .retrieve().bodyToMono(AltinnInstanceModel.class);
+                .retrieve().bodyToMono(AltinnInstanceModel.class)
+                .map(AltinnInstanceModel::getInstances);
     }
 
     public Mono<ApplicationModel> getApplicationData(AltinnInstance altinnInstance) {
         String uri = altinnInstance.getData().stream()
                     .filter(data -> data.getDataType().equals("Datamodell"))
                     .findFirst()
-                    .orElseThrow(() -> new RuntimeException("No matching Datamodell in instance"))
+                    .orElseThrow(() -> new RuntimeException("No matching Datamodell found in instance"))
                     .getSelfLinks().get("platform");
 
             return webClient.mutate()
@@ -46,10 +49,10 @@ public class AltinnInstanceService {
                     .bodyToMono(ApplicationModel.class);
     }
 
-    public Mono<String> getInstance(String instanceId) {
+    public Mono<AltinnInstance> getInstance(String instanceId) {
         return webClient.get()
                 .uri("/storage/api/v1/instances/" + instanceId + "?appId=vigo/drosjesentral")
-                .retrieve().bodyToMono(String.class);
+                .retrieve().bodyToMono(AltinnInstance.class);
     }
 
 }
