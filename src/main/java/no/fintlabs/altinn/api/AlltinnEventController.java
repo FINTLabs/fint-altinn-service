@@ -47,9 +47,8 @@ public class AlltinnEventController {
     @PostMapping("/instance/{partyId}/{instanceId}")
     public void getAltinnInstance(@PathVariable String partyId, @PathVariable String instanceId) {
         altinnInstanceService.getInstance(partyId.concat("/").concat(instanceId))
-                .filter(this::isNew)
                 .map(this::processInstance)
-                .subscribe();;
+                .subscribe();
     }
 
     private Mono<ApplicationModel> processInstance(AltinnInstance altinnInstance) {
