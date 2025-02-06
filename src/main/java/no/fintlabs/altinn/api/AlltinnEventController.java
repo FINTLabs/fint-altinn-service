@@ -41,7 +41,6 @@ public class AlltinnEventController {
                 .filter(this::isNew)
                 .map(this::processInstance)
                 .subscribe();
-
     }
 
     @PostMapping("/instance/{partyId}/{instanceId}")
@@ -82,6 +81,7 @@ public class AlltinnEventController {
                     Instance.builder()
                             .instanceId(tuple.getT1().getId())
                             .completed(true)
+                            .fintOrgId(altinnInstance.getFintOrgId())
                             .build());
         };
     }

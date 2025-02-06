@@ -18,7 +18,10 @@ public class InstancePublisherService {
     }
 
     public void publish(KafkaAltinnInstance altinnInstance) {
-        String topicName = topics.getAltinnInstanceCreated();
+        String topicName = topics.getAltinnInstanceCreated()
+                .replace("fint-org-id",
+                        altinnInstance.getFintOrgId().replace(".", "-"));
+
         log.info("Publishing altinn instance to topic {}: {}", topicName, altinnInstance);
         kafkaTemplate
                 .send(topicName, altinnInstance.getInstanceId(), altinnInstance)

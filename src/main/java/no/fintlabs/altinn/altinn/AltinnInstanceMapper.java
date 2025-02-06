@@ -86,7 +86,8 @@ public class AltinnInstanceMapper {
                 Map.entry("46", "vlfk.no"),
                 Map.entry("50", "trondelagfylke.no"),
                 Map.entry("55", "tromsfylke.no"),
-                Map.entry("56", "ffk.no")
+                Map.entry("56", "ffk.no"),
+                Map.entry("03", "bym.oslo.kommune.no")
         ).getOrDefault(fylkesnummer, "");
     }
 }

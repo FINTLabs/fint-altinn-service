@@ -23,5 +23,8 @@ public class Instance {
     private String instanceId;
 
     @NotNull
+    private String fintOrgId;
+
+    @NotNull
     private boolean completed;
 }
