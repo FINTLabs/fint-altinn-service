@@ -7,6 +7,7 @@ import no.fintlabs.altinn.altinn.AltinnInstanceService;
 import no.fintlabs.altinn.altinn.model.AltinnInstance;
 import no.fintlabs.altinn.altinn.model.ApplicationModel;
 import no.fintlabs.altinn.database.Instance;
+import no.fintlabs.altinn.database.InstanceFile;
 import no.fintlabs.altinn.database.InstanceRepository;
 import no.fintlabs.altinn.kafka.InstancePublisherService;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
-import java.util.function.Consumer;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -56,7 +57,7 @@ public class AlltinnEventController {
         Mono<ApplicationModel> applicationData = altinnInstanceService.getApplicationData(altinnInstance);
 
         Mono.zip(Mono.just(altinnInstance), applicationData)
-                .doOnSuccess(publishAndSave())
+                .doOnSuccess(this::publishAndSave)
                 .doOnError(throwable -> log.error("Error: ", throwable))
                 .subscribe(tuple ->
                         log.info("Instance: {}, Datamodell XML: {}",
@@ -70,21 +71,34 @@ public class AlltinnEventController {
                 .noneMatch(instance -> instance.getInstanceId().equals(altinnInstanse.getId()));
     }
 
-    private Consumer<Tuple2<AltinnInstance, ApplicationModel>> publishAndSave() {
-        return tuple -> {
-            KafkaAltinnInstance altinnInstance = AltinnInstanceMapper.mapToAltinnInstance(
-                    tuple.getT1(),
-                    tuple.getT2());
-            instancePublisherService.publish(altinnInstance);
+    private void publishAndSave(Tuple2<AltinnInstance, ApplicationModel> tuple) {
+        AltinnInstance altinnInstance = tuple.getT1();
+        ApplicationModel applicationModel = tuple.getT2();
 
-            altinnRepository.saveInstance(
-                    Instance.builder()
-                            .instanceId(tuple.getT1().getId())
-                            .completed(true)
-                            .fintOrgId(altinnInstance.getFintOrgId())
-                            .build());
-        };
+        KafkaAltinnInstance kafkaAltinnInstance = AltinnInstanceMapper.mapToAltinnInstance(altinnInstance, applicationModel);
+        instancePublisherService.publish(kafkaAltinnInstance);
+
+        Instance instance = Instance.builder()
+                .instanceId(altinnInstance.getId())
+                .completed(true)
+                .fintOrgId(kafkaAltinnInstance.getFintOrgId())
+                .build();
+
+        List<InstanceFile> files = altinnInstance.getData().stream()
+                .filter(altinnData -> altinnData.getDataType().startsWith("FileUpload-") || altinnData.getDataType().contains("ref-data-as-pdf"))
+                .map(altinnData ->
+                        InstanceFile.builder()
+                                .dataType(altinnData.getDataType().replace("FileUpload-", ""))
+                                .url(altinnData.getSelfLinks().get("platform"))
+                                .contentType(altinnData.getContentType())
+                                .fileName(altinnData.getFilename())
+                                .instance(instance)
+                                .build())
+                .toList();
+
+        instance.setFiles(files);
+
+        altinnRepository.saveInstance(instance);
     }
-
 
 }

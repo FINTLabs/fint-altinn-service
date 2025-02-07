@@ -4,7 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import no.fintlabs.altinn.maskinporten.MaskinportenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.client.*;
+import org.springframework.web.reactive.function.client.ClientRequest;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.ExchangeFunction;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -18,7 +21,7 @@ public class AltinnWebClientConfig {
     }
 
     @Bean
-    public WebClient altinnwWebClient(WebClient.Builder builder) {
+    public WebClient altinnWebClient(WebClient.Builder builder) {
         return builder
                 .filter(this::maskinportenAuthorization)
                 .baseUrl("https://platform.tt02.altinn.no")

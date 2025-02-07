@@ -1,11 +1,9 @@
 package no.fintlabs.altinn.database;
 
-import com.sun.istack.NotNull;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.Collection;
 
 @Getter
 @Setter
@@ -19,12 +17,15 @@ public class Instance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(nullable = false)
     private String instanceId;
 
-    @NotNull
+    @Column(nullable = false)
     private String fintOrgId;
 
-    @NotNull
+    @Column(nullable = false)
     private boolean completed;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "instance", fetch = FetchType.EAGER)
+    private Collection<InstanceFile> files;
 }

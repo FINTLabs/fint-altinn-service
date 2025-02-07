@@ -10,12 +10,7 @@ public interface InstanceRepository extends JpaRepository<Instance, Long> {
         return findAll();
     }
 
-    default Instance getInstance(String instanceId) {
-        return findAll().stream()
-                .filter(instance -> instance.getInstanceId().equals(instanceId))
-                .findFirst()
-                .orElse(null);
-    }
+    Instance findByInstanceId(String instanceId);
 
     default void saveInstance(Instance instance) {
         save(instance);

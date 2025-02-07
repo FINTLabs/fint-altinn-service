@@ -19,8 +19,8 @@ public class AltinnInstanceService {
 
     private final WebClient webClient;
 
-    public AltinnInstanceService(WebClient altinnwWebClient) {
-        this.webClient = altinnwWebClient;
+    public AltinnInstanceService(WebClient altinnWebClient) {
+        this.webClient = altinnWebClient;
     }
 
     public Mono<List<AltinnInstance>> getInstances() {
