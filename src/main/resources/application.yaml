@@ -6,7 +6,9 @@ server:
     include-stacktrace: never # Do not modify this setting without careful consideration, as changes may impact the system's security.
 
 logging:
-  level.no.fintlabs: DEBUG
+  level:
+    no.fintlabs: DEBUG
+    org.springframework.kafka.core: WARN
 
 spring:
   autoconfigure:

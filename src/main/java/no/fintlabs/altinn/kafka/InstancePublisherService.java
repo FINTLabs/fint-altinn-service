@@ -27,8 +27,8 @@ public class InstancePublisherService {
                         altinnInstance.getFintOrgId().replace(".", "-"));
 
         kafkaAdmin.createOrModifyTopics(new NewTopic(topicName, 1, (short) 1));
-
         log.info("Publishing altinn instance to topic {}: {}", topicName, altinnInstance);
+
         kafkaTemplate
                 .send(topicName, altinnInstance.getInstanceId(), altinnInstance)
                 .thenAccept(result ->
