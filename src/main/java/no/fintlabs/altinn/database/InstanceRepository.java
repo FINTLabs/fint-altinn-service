@@ -12,6 +12,8 @@ public interface InstanceRepository extends JpaRepository<Instance, Long> {
 
     Instance findByInstanceId(String instanceId);
 
+    Instance findFirstByInstanceIdOrderByLastUpdatedDesc(String instanceId);
+
     default void saveInstance(Instance instance) {
         save(instance);
     }

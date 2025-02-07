@@ -35,7 +35,7 @@ public class AltinnFileController {
         String id = partyId.concat("/").concat(instanceId);
         log.info("Getting file(s) for instanceId: {}", id);
 
-        return instanceRepository.findByInstanceId(id)
+        return instanceRepository.findFirstByInstanceIdOrderByLastUpdatedDesc(id)
                 .getFiles().stream()
                 .map(InstanceFile::getDataType)
                 .collect(Collectors.toList());
@@ -46,7 +46,7 @@ public class AltinnFileController {
         String id = partyId.concat("/").concat(instanceId);
         log.info("Getting file for instanceId: {} and dataType: {}", id, fileDataType);
 
-        return instanceRepository.findByInstanceId(id).getFiles().stream()
+        return instanceRepository.findFirstByInstanceIdOrderByLastUpdatedDesc(id).getFiles().stream()
                 .filter(file -> file.getDataType().equals(fileDataType))
                 .findFirst()
                 .map(this::retrieveFile)
