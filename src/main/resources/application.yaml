@@ -9,6 +9,7 @@ logging:
   level:
     no.fintlabs: DEBUG
     org.springframework.kafka.core: WARN
+    org.apache.kafka.clients.producer: WARN
 
 spring:
   autoconfigure:
