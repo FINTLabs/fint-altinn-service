@@ -29,7 +29,9 @@ public class AlltinnEventController {
     private final InstancePublisherService instancePublisherService;
     private final InstanceRepository altinnRepository;
 
-    public AlltinnEventController(AltinnInstanceService altinnInstanceService, InstancePublisherService instancePublisherService, InstanceRepository altinnRepository) {
+    public AlltinnEventController(AltinnInstanceService altinnInstanceService,
+                                  InstancePublisherService instancePublisherService,
+                                  InstanceRepository altinnRepository) {
         this.altinnInstanceService = altinnInstanceService;
         this.instancePublisherService = instancePublisherService;
         this.altinnRepository = altinnRepository;
@@ -100,5 +102,4 @@ public class AlltinnEventController {
 
         altinnRepository.saveInstance(instance);
     }
-
 }

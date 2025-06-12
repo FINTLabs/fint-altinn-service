@@ -44,6 +44,4 @@ public class AltinnWebClientConfig {
                 .bodyToMono(String.class)
                 .doOnError(error -> log.error("Error exchanging Maskinporten token for Altinn token", error));
     }
-
-
 }

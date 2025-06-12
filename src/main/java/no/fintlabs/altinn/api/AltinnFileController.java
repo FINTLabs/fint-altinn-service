@@ -42,7 +42,9 @@ public class AltinnFileController {
     }
 
     @GetMapping("/{partyId}/{instanceId}/{fileDataType}")
-    public Mono<ResponseEntity<ByteArrayResource>> getFileContent(@PathVariable String partyId, @PathVariable String instanceId, @PathVariable String fileDataType) {
+    public Mono<ResponseEntity<ByteArrayResource>> getFileContent(@PathVariable String partyId,
+                                                                  @PathVariable String instanceId,
+                                                                  @PathVariable String fileDataType) {
         String id = partyId.concat("/").concat(instanceId);
         log.info("Getting file for instanceId: {} and dataType: {}", id, fileDataType);
 
@@ -68,5 +70,4 @@ public class AltinnFileController {
                         }
                 );
     }
-
 }

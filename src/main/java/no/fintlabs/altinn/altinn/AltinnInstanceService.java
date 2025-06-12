@@ -54,5 +54,4 @@ public class AltinnInstanceService {
                 .uri("/storage/api/v1/instances/" + instanceId + "?appId=vigo/drosjesentral")
                 .retrieve().bodyToMono(AltinnInstance.class);
     }
-
 }

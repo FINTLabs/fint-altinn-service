@@ -15,7 +15,9 @@ public class InstancePublisherService {
     private final KafkaTemplate<String, KafkaAltinnInstance> kafkaTemplate;
     private final KafkaTopicNameProperties topics;
 
-    public InstancePublisherService(KafkaAdmin kafkaAdmin, KafkaTemplate<String, KafkaAltinnInstance> kafkaTemplate, KafkaTopicNameProperties topics) {
+    public InstancePublisherService(KafkaAdmin kafkaAdmin,
+                                    KafkaTemplate<String,KafkaAltinnInstance> kafkaTemplate,
+                                    KafkaTopicNameProperties topics) {
         this.kafkaAdmin = kafkaAdmin;
         this.kafkaTemplate = kafkaTemplate;
         this.topics = topics;

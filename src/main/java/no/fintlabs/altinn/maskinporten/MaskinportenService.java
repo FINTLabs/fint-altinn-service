@@ -107,7 +107,6 @@ public class MaskinportenService {
     }
 
     private String createSignedJwt() throws Exception {
-
         JWSHeader jwtHeader = new JWSHeader.Builder(JWSAlgorithm.RS256)
                 .keyID(maskinportenProperties.getKid())
                 .build();
@@ -134,7 +133,6 @@ public class MaskinportenService {
     }
 
     private boolean isJwtExpired(){
-        boolean isExpired = tokenExpirationTime < Clock.systemUTC().millis() - JWT_EXPIRATION_OFFSET;
-        return isExpired;
+        return tokenExpirationTime < Clock.systemUTC().millis() - JWT_EXPIRATION_OFFSET;
     }
 }
