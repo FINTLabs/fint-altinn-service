@@ -15,6 +15,11 @@ patches:
         path: "/spec/kafka/acls/0/topic"
         value: "ofk-no.altinn.*"
       - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.county-organization-number"
+          value: "930580783" # Akershus (Østfold virker ikke i stagingmiljøet til Altinn)
+      - op: add
         path: "/spec/url/basePath"
         value: "/beta"
       - op: replace
