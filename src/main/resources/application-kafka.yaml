@@ -1,14 +1,11 @@
 fint:
   kafka:
     topic:
-      altinn-instance-created: fint-org-id.altinn.event.instance-received
-
+      org-id: 'ofk-no'
+      domain-context: altinn
+    application-id: ${fint.application-id}
+    default-replicas: 1
 spring:
   kafka:
-    properties:
-        security.protocol: SSL
-    admin:
-      enabled: true
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: ${fint.application-id}

@@ -1,5 +1,6 @@
 fint:
-  org-id: fintlabs.no
+  org-id: ofk.no
+  county-organization-number: 930580783 # Akershus
 server:
   port: 8083
 logging:
@@ -13,6 +14,6 @@ spring:
   datasource:
     hikari:
       schema: fintlabs_no
-    url: jdbc:postgresql://localhost:5432/arkiv
+    url: jdbc:postgresql://localhost:5433/arkiv
     username: postgres
     password: postgres

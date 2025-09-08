@@ -1,0 +1,6 @@
+### Request altinn instance
+
+POST http://localhost:8083/api/event/instance/51895661/7de3ed5d-86b0-4ef7-82f4-037d42a7bbb6
+
+###
+
