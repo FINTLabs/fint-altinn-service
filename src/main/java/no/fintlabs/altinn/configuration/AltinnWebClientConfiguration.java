@@ -6,7 +6,7 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
-public class WebClientConfiguration {
+public class AltinnWebClientConfiguration {
 
     private static final int MAX_IN_MEMORY_SIZE = 50 * 1024 * 1024;
 

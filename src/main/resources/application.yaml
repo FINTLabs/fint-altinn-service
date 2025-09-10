@@ -1,5 +1,9 @@
 fint:
   application-id: fint-altinn-service
+  altinn:
+    ebevis:
+      api:
+        base-url: http://fint-altinn-ebevis-service:8080/
 server:
   error:
     include-message: never # Do not modify this setting without careful consideration, as changes may impact the system's security.

@@ -1,6 +1,10 @@
 fint:
   org-id: ofk.no
   county-organization-number: 930580783 # Akershus
+  altinn:
+    ebevis:
+      api:
+        base-url: http://localhost:8080
 server:
   port: 8083
 logging:

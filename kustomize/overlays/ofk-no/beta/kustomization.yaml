@@ -12,6 +12,9 @@ patches:
         path: "/spec/orgId"
         value: "ofk.no"
       - op: replace
+        path: "/fint/altinn/ebevis/api/base-url"
+        value: "http://fint-altinn-ebevis-service:8080/beta"
+      - op: replace
         path: "/spec/kafka/acls/0/topic"
         value: "ofk-no.altinn.*"
       - op: add
