@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import no.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fintlabs.kafka.model.ParameterizedProducerRecord;
 import no.fintlabs.kafka.producing.ParameterizedTemplate;
+import no.fintlabs.kafka.producing.ParameterizedTemplateFactory;
 import no.fintlabs.kafka.topic.name.EventTopicNameParameters;
 import no.fintlabs.kafka.topic.name.TopicNamePrefixParameters;
 import org.springframework.kafka.core.KafkaAdmin;
@@ -21,10 +22,12 @@ public class InstanceProducer {
 
     public InstanceProducer(KafkaAdmin kafkaAdmin,
                             KafkaTemplate<String,KafkaAltinnInstance> kafkaTemplate,
-                            KafkaTopicNameProperties topics) {
+                            KafkaTopicNameProperties topics,
+                            ParameterizedTemplateFactory parameterizedTemplateFactory) {
         this.kafkaAdmin = kafkaAdmin;
         this.kafkaTemplate = kafkaTemplate;
         this.topics = topics;
+        parameterizedTemplate = parameterizedTemplateFactory.createTemplate(KafkaAltinnInstance.class);
     }
 
     public void publish(KafkaAltinnInstance altinnInstance) {
