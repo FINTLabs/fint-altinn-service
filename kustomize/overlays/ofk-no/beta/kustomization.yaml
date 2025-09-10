@@ -11,9 +11,7 @@ patches:
       - op: replace
         path: "/spec/orgId"
         value: "ofk.no"
-      - op: replace
-        path: "/fint/altinn/ebevis/api/base-url"
-        value: "http://fint-altinn-ebevis-service:8080/beta"
+      
       - op: replace
         path: "/spec/kafka/acls/0/topic"
         value: "ofk-no.altinn.*"
@@ -22,6 +20,11 @@ patches:
         value:
           name: "fint.county-organization-number"
           value: "930580783" # Akershus (Østfold virker ikke i stagingmiljøet til Altinn)
+      - op: add
+        path: "/spec/env/-"
+        value: 
+          name: "fint.altinn.ebevis.api.base-url"
+          value: "http://fint-altinn-ebevis-service:8080/beta"
       - op: add
         path: "/spec/url/basePath"
         value: "/beta"
