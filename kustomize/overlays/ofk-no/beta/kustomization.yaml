@@ -24,7 +24,7 @@ patches:
         path: "/spec/env/-"
         value: 
           name: "fint.altinn.ebevis.api.base-url"
-          value: "http://altinn-ebevis-service.default:8080/beta"
+          value: "http://altinn-ebevis-service.default:8080"
       - op: add
         path: "/spec/url/basePath"
         value: "/beta"
