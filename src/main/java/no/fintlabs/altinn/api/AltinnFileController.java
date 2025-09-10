@@ -65,7 +65,7 @@ public class AltinnFileController {
         log.info("Getting file for instanceId: {} and dataType: {}", instanceId, evidenceCodeName);
 
         return ebevisWebClient.get()
-                .uri(String.format("evidence/file/%s/%s/%s", partyId, instanceId, evidenceCodeName))
+                .uri(String.format("/evidence/file/%s/%s/%s", partyId, instanceId, evidenceCodeName))
                 .retrieve()
                 .bodyToMono(ByteArrayResource.class)
                 .map(resource -> ResponseEntity.ok()
