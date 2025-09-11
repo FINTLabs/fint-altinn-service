@@ -1,6 +1,7 @@
 fint:
   org-id: ofk.no
   county-organization-number: 930580783 # Akershus
+  county-number: 31
   altinn:
     ebevis:
       api:

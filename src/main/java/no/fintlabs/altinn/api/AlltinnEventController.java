@@ -31,7 +31,6 @@ import static no.fintlabs.altinn.altinn.AltinnInstanceMapper.mapToAltinnInstance
 public class AlltinnEventController {
 
     private final AltinnInstanceService altinnInstanceService;
-    private final InstanceProducer instanceProducer;
     private final InstanceRepository altinnRepository;
     private final EbevisConsentRequestProducer consentRequestProducer;
 
@@ -41,11 +40,13 @@ public class AlltinnEventController {
     @Value("${fint.county-organization-number}")
     private String countyOrganizationNumber;
 
+    @Value("${fint.county-number}")
+    private String countyNumber;
+
     public AlltinnEventController(AltinnInstanceService altinnInstanceService,
                                   InstanceProducer instanceProducer,
                                   InstanceRepository altinnRepository, EbevisConsentRequestProducer consentRequestProducer) {
         this.altinnInstanceService = altinnInstanceService;
-        this.instanceProducer = instanceProducer;
         this.altinnRepository = altinnRepository;
         this.consentRequestProducer = consentRequestProducer;
 
@@ -56,37 +57,41 @@ public class AlltinnEventController {
         altinnInstanceService.getInstances()
                 .flatMapMany(Flux::fromIterable)
                 .filter(this::isNew)
-                .map(this::processInstance)
+                .map(this::requestApplicationData)
+                .map(tuple2 ->
+                        tuple2
+                                .filter(this::onlyInstancesForConfiguredCounty)
+                                .map(this::publishEbevisConcentRequest)
+                )
                 .subscribe();
     }
 
     @PostMapping("/instance/{partyId}/{instanceId}")
     public void getAltinnInstance(@PathVariable String partyId, @PathVariable String instanceId) {
         altinnInstanceService.getInstance(partyId.concat("/").concat(instanceId))
-                .map(this::processInstance)
+                .flatMap(this::requestApplicationData)
+                .filter(this::onlyInstancesForConfiguredCounty)
+                .map(this::publishEbevisConcentRequest)
                 .subscribe();
     }
 
-    private Mono<ApplicationModel> processInstance(AltinnInstance altinnInstance) {
-        log.info("New instance: {}", altinnInstance.getId());
-
-        Mono<ApplicationModel> applicationData = altinnInstanceService.getApplicationData(altinnInstance);
-
-        Mono.zip(Mono.just(altinnInstance), applicationData)
-                .doOnSuccess(this::publishEbevisConcentRequest)
-                .doOnError(throwable -> log.error("Error: ", throwable))
-                .subscribe(tuple ->
-                        log.info("Instance: {}, Datamodell XML: {}",
-                                tuple.getT1().getId(), tuple.getT2()));
-
-        return applicationData;
+    private boolean onlyInstancesForConfiguredCounty(Tuple2<AltinnInstance, ApplicationModel> tuple2) {
+        return tuple2.getT2().getVirksomhet().getFylke().getFylkesnummer().equals(countyNumber);
     }
 
-    private void publishEbevisConcentRequest(Tuple2<AltinnInstance, ApplicationModel> objects) {
+    private Mono<Tuple2<AltinnInstance, ApplicationModel>> requestApplicationData(AltinnInstance altinnInstance) {
+        log.info("New instance: {}", altinnInstance.getId());
 
-        KafkaAltinnInstance kafkaAltinnInstance = mapToAltinnInstance(objects.getT1(), objects.getT2());
+        return Mono.zip(
+                Mono.just(altinnInstance),
+                altinnInstanceService.getApplicationData(altinnInstance));
+    }
 
-        log.info("Congratulations! 🎉 You received a new instance with instanceId {} from organizationName {} in county {}",
+    private Tuple2<AltinnInstance, ApplicationModel> publishEbevisConcentRequest(Tuple2<AltinnInstance, ApplicationModel> tuple) {
+
+        KafkaAltinnInstance kafkaAltinnInstance = mapToAltinnInstance(tuple.getT1(), tuple.getT2());
+
+        log.info("{}: New instance received from organizationName {} in county {}",
                 kafkaAltinnInstance.getInstanceId(),
                 kafkaAltinnInstance.getOrganizationName(),
                 kafkaAltinnInstance.getCountyName());
@@ -99,6 +104,8 @@ public class AlltinnEventController {
                 .build();
 
         consentRequestProducer.publish(kafkaEvidenceRequest);
+
+        return tuple;
     }
 
     private boolean isNew(AltinnInstance altinnInstanse) {
