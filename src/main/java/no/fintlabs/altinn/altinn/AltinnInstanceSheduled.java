@@ -68,6 +68,9 @@ public class AltinnInstanceSheduled {
     }
 
     private boolean onlyInstancesForConfiguredCounty(Tuple2<AltinnInstance, ApplicationModel> tuple2) {
+        log.debug("CountyNumber: {}, County in applicationData: {}", countyNumber,
+                tuple2.getT2().getVirksomhet().getFylke().getFylkesnummer());
+
         return tuple2.getT2().getVirksomhet().getFylke().getFylkesnummer().equals(countyNumber);
     }
 
