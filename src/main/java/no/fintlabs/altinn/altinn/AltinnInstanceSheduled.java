@@ -5,6 +5,7 @@ import no.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fint.altinn.model.kafka.KafkaEvidenceConsentRequest;
 import no.fintlabs.altinn.altinn.model.AltinnInstance;
 import no.fintlabs.altinn.altinn.model.ApplicationModel;
+import no.fintlabs.altinn.database.Instance;
 import no.fintlabs.altinn.database.InstanceRepository;
 import no.fintlabs.altinn.kafka.EbevisConsentRequestProducer;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,32 +31,31 @@ public class AltinnInstanceSheduled {
     private String countyOrganizationNumber;
 
     private final AltinnInstanceService altinnInstanceService;
-    private final InstanceRepository altinnRepository;
+    private final InstanceRepository instanceRepository;
     private final EbevisConsentRequestProducer consentRequestProducer;
 
-    public AltinnInstanceSheduled(AltinnInstanceService altinnInstanceService, InstanceRepository altinnRepository,
+    public AltinnInstanceSheduled(AltinnInstanceService altinnInstanceService, InstanceRepository instanceRepository,
                                   EbevisConsentRequestProducer consentRequestProducer) {
         this.altinnInstanceService = altinnInstanceService;
-        this.altinnRepository = altinnRepository;
+        this.instanceRepository = instanceRepository;
         this.consentRequestProducer = consentRequestProducer;
     }
 
     @Scheduled(cron = "0 */10 * * * ?")
     public void getAltinnInstances() {
+        log.info("Scheduled fetching of altinn instances");
+
         altinnInstanceService.getInstances()
                 .flatMapMany(Flux::fromIterable)
                 .filter(this::isNew)
-                .map(this::requestApplicationData)
-                .map(tuple2 ->
-                        tuple2
-                                .filter(this::onlyInstancesForConfiguredCounty)
-                                .map(this::publishEbevisConcentRequest)
-                )
+                .flatMap(this::requestApplicationData)
+                .filter(this::onlyInstancesForConfiguredCounty)
+                .doOnNext(this::publishEbevisConcentRequest)
                 .subscribe();
     }
 
     private boolean isNew(AltinnInstance altinnInstanse) {
-        return altinnRepository.findAllInstances().stream()
+        return instanceRepository.findAllInstances().stream()
                 .noneMatch(instance -> instance.getInstanceId().equals(altinnInstanse.getId()));
     }
 
@@ -91,6 +91,12 @@ public class AltinnInstanceSheduled {
                 .build();
 
         consentRequestProducer.publish(kafkaEvidenceRequest);
+
+        instanceRepository.save(Instance.builder()
+                .instanceId(kafkaAltinnInstance.getInstanceId())
+                .completed(true)
+                .fintOrgId(kafkaAltinnInstance.getFintOrgId())
+                .build());
 
         return tuple;
     }
