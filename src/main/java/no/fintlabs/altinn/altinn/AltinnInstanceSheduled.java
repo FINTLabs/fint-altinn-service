@@ -43,7 +43,7 @@ public class AltinnInstanceSheduled {
 
     @Scheduled(cron = "0 */10 * * * ?")
     public void getAltinnInstances() {
-        log.info("Scheduled fetching of altinn instances");
+        log.info("⏱️ Scheduled fetching of altinn instances");
 
         altinnInstanceService.getInstances()
                 .flatMapMany(Flux::fromIterable)
@@ -60,11 +60,7 @@ public class AltinnInstanceSheduled {
     }
 
     private Mono<Tuple2<AltinnInstance, ApplicationModel>> requestApplicationData(AltinnInstance altinnInstance) {
-        log.info("New instance: {}", altinnInstance.getId());
-
-        return Mono.zip(
-                Mono.just(altinnInstance),
-                altinnInstanceService.getApplicationData(altinnInstance));
+        return Mono.zip(Mono.just(altinnInstance), altinnInstanceService.getApplicationData(altinnInstance));
     }
 
     private boolean onlyInstancesForConfiguredCounty(Tuple2<AltinnInstance, ApplicationModel> tuple2) {
