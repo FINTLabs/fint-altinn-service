@@ -28,6 +28,7 @@ import reactor.util.function.Tuple2;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 import static no.fintlabs.altinn.altinn.AltinnInstanceMapper.mapToAltinnInstance;
 
@@ -83,9 +84,9 @@ public class EbevisConsentAcceptedConsumer {
 
         ConcurrentMessageListenerContainer<String, KafkaEvidenceConsentAccepted> container =
                 parameterizedListenerContainerFactoryService.createRecordListenerContainerFactory(
-                        this::processMessage,
-                        listenerConfiguration)
-                .createContainer(eventTopicNameParameters);
+                                this::processMessage,
+                                listenerConfiguration)
+                        .createContainer(eventTopicNameParameters);
 
         container.setAutoStartup(true);
 
@@ -107,16 +108,22 @@ public class EbevisConsentAcceptedConsumer {
         AltinnInstance altinnInstance = altinnInstanceAndModel.getT1();
         ApplicationModel applicationModel = altinnInstanceAndModel.getT2();
 
-        log.info("Publishing instance: {}", altinnInstance.getId());
+        log.info("{}: Publishing instance.", altinnInstance.getId());
 
         KafkaAltinnInstance kafkaAltinnInstance = mapToAltinnInstance(altinnInstance, applicationModel);
         instanceProducer.publish(kafkaAltinnInstance);
 
-        Instance instance = Instance.builder()
-                .instanceId(altinnInstance.getId())
-                .completed(true)
-                .fintOrgId(kafkaAltinnInstance.getFintOrgId())
-                .build();
+        final Instance instance = Optional.ofNullable(instanceRepository.findFirstByInstanceIdOrderByLastUpdatedDesc(altinnInstance.getId()))
+                .map(existing -> {
+                    existing.setCompleted(true);
+                    existing.setFintOrgId(kafkaAltinnInstance.getFintOrgId());
+                    return existing;
+                })
+                .orElseGet(() -> Instance.builder()
+                        .instanceId(altinnInstance.getId())
+                        .completed(true)
+                        .fintOrgId(kafkaAltinnInstance.getFintOrgId())
+                        .build());
 
         List<InstanceFile> files = altinnInstance.getData().stream()
                 .filter(altinnData -> altinnData.getDataType().startsWith("FileUpload-") || altinnData.getDataType().contains("ref-data-as-pdf"))
