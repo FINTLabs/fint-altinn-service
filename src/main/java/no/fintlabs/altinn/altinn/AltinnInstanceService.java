@@ -31,22 +31,24 @@ public class AltinnInstanceService {
     }
 
     public Mono<ApplicationModel> getApplicationData(AltinnInstance altinnInstance) {
-        String uri = altinnInstance.getData().stream()
-                    .filter(data -> data.getDataType().equals("Datamodell"))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("No matching Datamodell found in instance"))
-                    .getSelfLinks().get("platform");
-
-            return webClient.mutate()
-                    .exchangeStrategies(ExchangeStrategies.builder()
-                            .codecs(configurer ->
-                                configurer.defaultCodecs().jaxb2Decoder(new Jaxb2XmlDecoder())).build())
-                    .build()
-                    .get()
-                    .uri(uri)
-                    .accept(MediaType.APPLICATION_XML)
-                    .retrieve()
-                    .bodyToMono(ApplicationModel.class);
+        return Mono.defer(() -> altinnInstance.getData().stream()
+                .filter(data -> data.getDataType().equals("Datamodell"))
+                .findFirst()
+                .map(data -> data.getSelfLinks().get("platform"))
+                .map(uri -> webClient.mutate()
+                        .exchangeStrategies(ExchangeStrategies.builder()
+                                .codecs(configurer ->
+                                        configurer.defaultCodecs().jaxb2Decoder(new Jaxb2XmlDecoder())).build())
+                        .build()
+                        .get()
+                        .uri(uri)
+                        .accept(MediaType.APPLICATION_XML)
+                        .retrieve()
+                        .bodyToMono(ApplicationModel.class))
+                .orElseGet(() -> {
+                    log.warn("No matching Datamodell found in instance {}", altinnInstance.getId());
+                    return Mono.empty();
+                }));
     }
 
     public Mono<AltinnInstance> getInstance(String instanceId) {

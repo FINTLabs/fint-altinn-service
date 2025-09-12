@@ -31,7 +31,7 @@ public class EbevisConsentRequestProducer {
                 .topicNamePrefixParameters(prefixParameters)
                 .build();
 
-        log.info("{}: Publishing consent request to topic {}.", consentRequest.getAltinnInstanceId(), topicNameParameters1.toString());
+        log.info("{}: Publishing consent request", consentRequest.getAltinnInstanceId());
         parameterizedTemplate.send(
                 ParameterizedProducerRecord.<KafkaEvidenceConsentRequest>builder()
                         .topicNameParameters(topicNameParameters1)

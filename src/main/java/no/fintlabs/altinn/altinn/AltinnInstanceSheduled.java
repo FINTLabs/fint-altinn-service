@@ -51,7 +51,10 @@ public class AltinnInstanceSheduled {
                 .flatMap(this::requestApplicationData)
                 .filter(this::onlyInstancesForConfiguredCounty)
                 .doOnNext(this::publishEbevisConcentRequest)
+                .collectList()
+                .doOnSuccess(list -> log.info("Fetched new {} altinn instance(s).", list.size()))
                 .subscribe();
+
     }
 
     private boolean isNew(AltinnInstance altinnInstanse) {
@@ -64,9 +67,6 @@ public class AltinnInstanceSheduled {
     }
 
     private boolean onlyInstancesForConfiguredCounty(Tuple2<AltinnInstance, ApplicationModel> tuple2) {
-        log.debug("CountyNumber: {}, County in applicationData: {}", countyNumber,
-                tuple2.getT2().getVirksomhet().getFylke().getFylkesnummer());
-
         return tuple2.getT2().getVirksomhet().getFylke().getFylkesnummer().equals(countyNumber);
     }
 
@@ -74,8 +74,9 @@ public class AltinnInstanceSheduled {
 
         KafkaAltinnInstance kafkaAltinnInstance = mapToAltinnInstance(tuple.getT1(), tuple.getT2());
 
-        log.info("{}: New instance received from organizationName {} in county {}",
+        log.info("{}: New instance received from organizationNumber {} with organizationName {} in county {}",
                 kafkaAltinnInstance.getInstanceId(),
+                kafkaAltinnInstance.getOrganizationNumber(),
                 kafkaAltinnInstance.getOrganizationName(),
                 kafkaAltinnInstance.getCountyName());
 
