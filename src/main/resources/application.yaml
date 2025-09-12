@@ -11,9 +11,10 @@ server:
 
 logging:
   level:
-    no.fintlabs: DEBUG
-    org.springframework.kafka.core: WARN
-    org.apache.kafka.clients: WARN
+    no.fintlabs: debug
+    no.fintlabs.altinn.maskinporten: info
+    org.springframework.kafka.core: error
+    org.apache.kafka.clients: error
 
 spring:
   http:
