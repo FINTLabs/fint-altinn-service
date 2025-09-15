@@ -54,7 +54,7 @@ dependencies {
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.2'
     implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.5'
 
-    implementation 'no.fint:fint-altinn-model:3.0.0-rc-7'
+    implementation 'no.fint:fint-altinn-model:3.0.0-rc-8'
 
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
