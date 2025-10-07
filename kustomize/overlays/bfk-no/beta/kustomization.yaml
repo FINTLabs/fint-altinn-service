@@ -1,0 +1,53 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: bfk-no
+
+resources:
+  - ../../../base
+
+patches:
+  - patch: |-
+      - op: replace
+        path: "/spec/orgId"
+        value: "bfk.no"
+      
+      - op: replace
+        path: "/spec/kafka/acls/0/topic"
+        value: "bfk-no.altinn.*"
+        
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.county-organization-number"
+          value: "930580260"
+      
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.county-number"
+          value: "33"
+      
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.org-id"
+          value: "bfk.no"
+          
+      - op: add
+        path: "/spec/env/-"
+        value: 
+          name: "fint.altinn.ebevis.api.base-url"
+          value: "http://altinn-ebevis-service.default:8080"
+
+      - op: add
+        path: "/spec/url/basePath"
+        value: "/beta"
+
+      - op: replace
+        path: "/spec/ingress/basePath"
+        value: "/beta/api"
+
+    target:
+      kind: Application
+      name: fint-altinn-service
