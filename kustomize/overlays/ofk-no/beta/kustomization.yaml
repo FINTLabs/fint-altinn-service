@@ -6,6 +6,10 @@ namespace: ofk-no
 resources:
   - ../../../base
 
+labels:
+  - pairs:
+      fintlabs.no/org-id: ofk.no
+
 patches:
   - patch: |-
       - op: replace

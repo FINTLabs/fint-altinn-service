@@ -6,6 +6,10 @@ namespace: bfk-no
 resources:
   - ../../../base
 
+labels:
+  - pairs:
+      fintlabs.no/org-id: bfk.no
+
 patches:
   - patch: |-
       - op: replace
