@@ -52,7 +52,7 @@ public class AltinnInstanceSheduled {
                 .filter(this::onlyInstancesForConfiguredCounty)
                 .doOnNext(this::publishEbevisConcentRequest)
                 .collectList()
-                .doOnSuccess(list -> log.info("Fetched new {} altinn instance(s).", list.size()))
+                .doOnSuccess(list -> log.info("Fetched {} new altinn instance(s).", list.size()))
                 .subscribe();
 
     }
@@ -74,15 +74,17 @@ public class AltinnInstanceSheduled {
 
         KafkaAltinnInstance kafkaAltinnInstance = mapToAltinnInstance(tuple.getT1(), tuple.getT2());
 
-        log.info("{}: New instance received from organizationNumber {} with organizationName {} in county {}",
+        log.info("{}: New instance received from organizationNumber {} with organizationName {} in county {} and orgId {}",
                 kafkaAltinnInstance.getInstanceId(),
                 kafkaAltinnInstance.getOrganizationNumber(),
                 kafkaAltinnInstance.getOrganizationName(),
-                kafkaAltinnInstance.getCountyName());
+                kafkaAltinnInstance.getCountyName(),
+                orgId);
 
         KafkaEvidenceConsentRequest kafkaEvidenceRequest = KafkaEvidenceConsentRequest.builder()
                 .altinnInstanceId(kafkaAltinnInstance.getInstanceId())
                 .organizationNumber(kafkaAltinnInstance.getOrganizationNumber())
+                .organizationName(kafkaAltinnInstance.getOrganizationName())
                 .fintOrgId(orgId)
                 .countyOrganizationNumber(countyOrganizationNumber)
                 .build();

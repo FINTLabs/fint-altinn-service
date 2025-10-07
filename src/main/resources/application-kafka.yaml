@@ -1,7 +1,7 @@
 fint:
   kafka:
     topic:
-      org-id: 'ofk-no'
+      org-id: ${fint.org-id}
       domain-context: altinn
     application-id: ${fint.application-id}
     default-replicas: 1

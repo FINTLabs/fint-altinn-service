@@ -21,11 +21,19 @@ patches:
         value:
           name: "fint.county-organization-number"
           value: "930580783" # Akershus (Østfold virker ikke i stagingmiljøet til Altinn)
+      
       - op: add
         path: "/spec/env/-"
         value:
           name: "fint.county-number"
           value: "31"
+      
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.org-id"
+          value: "ofk.no"
+          
       - op: add
         path: "/spec/env/-"
         value: 
