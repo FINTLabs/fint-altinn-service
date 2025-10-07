@@ -7,6 +7,7 @@ import no.fintlabs.kafka.producing.ParameterizedTemplate;
 import no.fintlabs.kafka.producing.ParameterizedTemplateFactory;
 import no.fintlabs.kafka.topic.name.EventTopicNameParameters;
 import no.fintlabs.kafka.topic.name.TopicNamePrefixParameters;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 public class InstanceProducer {
+
+    @Value("${fint.org-id}")
+    private String orgId;
 
     private final KafkaAdmin kafkaAdmin;
     private final KafkaTemplate<String, KafkaAltinnInstance> kafkaTemplate;
@@ -33,7 +37,7 @@ public class InstanceProducer {
     public void publish(KafkaAltinnInstance altinnInstance) {
 
         TopicNamePrefixParameters prefixParameters = TopicNamePrefixParameters.builder()
-                .orgIdApplicationDefault()
+                .orgId(orgId.replace(".", "-"))
                 .domainContextApplicationDefault()
                 .build();
 
