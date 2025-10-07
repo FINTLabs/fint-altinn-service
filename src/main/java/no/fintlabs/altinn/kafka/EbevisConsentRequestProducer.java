@@ -7,11 +7,15 @@ import no.fintlabs.kafka.producing.ParameterizedTemplate;
 import no.fintlabs.kafka.producing.ParameterizedTemplateFactory;
 import no.fintlabs.kafka.topic.name.EventTopicNameParameters;
 import no.fintlabs.kafka.topic.name.TopicNamePrefixParameters;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class EbevisConsentRequestProducer {
+
+    @Value("${fint.org-id}")
+    private String orgId;
 
     private final ParameterizedTemplate<KafkaEvidenceConsentRequest> parameterizedTemplate;
 
@@ -22,7 +26,7 @@ public class EbevisConsentRequestProducer {
     public void publish(KafkaEvidenceConsentRequest consentRequest) {
 
         TopicNamePrefixParameters prefixParameters = TopicNamePrefixParameters.builder()
-                .orgIdApplicationDefault()
+                .orgId(orgId.replace(".", "-"))
                 .domainContextApplicationDefault()
                 .build();
 

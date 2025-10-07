@@ -36,13 +36,16 @@ import static no.fintlabs.altinn.altinn.AltinnInstanceMapper.mapToAltinnInstance
 @Component
 public class EbevisConsentAcceptedConsumer {
 
+    @Value("${fint.org-id}")
+    private String orgId;
+
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
+
     private final EventTopicService eventTopicService;
     private final AltinnInstanceService altinnInstanceService;
     private final InstanceProducer instanceProducer;
     private final InstanceRepository instanceRepository;
-
-    @Value("${spring.kafka.consumer.group-id}")
-    private String groupId;
 
     public EbevisConsentAcceptedConsumer(EventTopicService eventTopicService, AltinnInstanceService altinnInstanceService, InstanceProducer instanceProducer, InstanceRepository instanceRepository) {
         this.eventTopicService = eventTopicService;
@@ -56,7 +59,7 @@ public class EbevisConsentAcceptedConsumer {
             ParameterizedListenerContainerFactoryService parameterizedListenerContainerFactoryService) {
 
         TopicNamePrefixParameters topicNamePrefixParameters = TopicNamePrefixParameters.builder()
-                .orgIdApplicationDefault()
+                .orgId(orgId.replace(".", "-"))
                 .domainContextApplicationDefault()
                 .build();
 
