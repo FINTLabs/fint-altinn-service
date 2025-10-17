@@ -45,11 +45,19 @@ patches:
           value: "http://altinn-ebevis-service.default:8080"
 
       - op: add
+        path: "/spec/env/-"
+        value: 
+          name: "fint.altinn.platform.base-url"
+          value: "https://platform.tt02.altinn.no"
+
+      - op: add
         path: "/spec/url/basePath"
         value: "/beta"
+
       - op: replace
         path: "/spec/ingress/basePath"
         value: "/beta/api"
+
     target:
       kind: Application
       name: fint-altinn-service
