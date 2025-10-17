@@ -2,6 +2,7 @@ package no.fintlabs.altinn.altinn;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fintlabs.altinn.maskinporten.MaskinportenService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.ClientRequest;
@@ -16,6 +17,10 @@ public class AltinnWebClientConfig {
 
     private final MaskinportenService maskinportenService;
 
+    @Value("${fint.altinn.platform.base-url}")
+    private String baseUrl;
+
+
     public AltinnWebClientConfig(MaskinportenService maskinportenService) {
         this.maskinportenService = maskinportenService;
     }
@@ -24,7 +29,7 @@ public class AltinnWebClientConfig {
     public WebClient altinnWebClient(WebClient.Builder builder) {
         return builder
                 .filter(this::maskinportenAuthorization)
-                .baseUrl("https://platform.tt02.altinn.no")
+                .baseUrl(baseUrl)
                 .build();
     }
 
@@ -37,7 +42,7 @@ public class AltinnWebClientConfig {
     }
 
     private Mono<String> exchangeForAltinnToken(String bearToken) {
-        return WebClient.create("https://platform.tt02.altinn.no").get()
+        return WebClient.create(baseUrl).get()
                 .uri("/authentication/api/v1/exchange/maskinporten")
                 .header("Authorization", bearToken)
                 .retrieve()
