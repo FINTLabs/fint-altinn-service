@@ -2,11 +2,11 @@ package no.fintlabs.altinn.kafka;
 
 import lombok.extern.slf4j.Slf4j;
 import no.fint.altinn.model.kafka.KafkaAltinnInstance;
-import no.fintlabs.kafka.model.ParameterizedProducerRecord;
-import no.fintlabs.kafka.producing.ParameterizedTemplate;
-import no.fintlabs.kafka.producing.ParameterizedTemplateFactory;
-import no.fintlabs.kafka.topic.name.EventTopicNameParameters;
-import no.fintlabs.kafka.topic.name.TopicNamePrefixParameters;
+import no.novari.kafka.producing.ParameterizedProducerRecord;
+import no.novari.kafka.producing.ParameterizedTemplate;
+import no.novari.kafka.producing.ParameterizedTemplateFactory;
+import no.novari.kafka.topic.name.EventTopicNameParameters;
+import no.novari.kafka.topic.name.TopicNamePrefixParameters;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -36,7 +36,7 @@ public class InstanceProducer {
 
     public void publish(KafkaAltinnInstance altinnInstance) {
 
-        TopicNamePrefixParameters prefixParameters = TopicNamePrefixParameters.builder()
+        TopicNamePrefixParameters prefixParameters = TopicNamePrefixParameters.stepBuilder()
                 .orgId(orgId.replace(".", "-"))
                 .domainContextApplicationDefault()
                 .build();

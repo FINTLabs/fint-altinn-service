@@ -9,22 +9,20 @@ import no.fintlabs.altinn.altinn.model.ApplicationModel;
 import no.fintlabs.altinn.database.Instance;
 import no.fintlabs.altinn.database.InstanceFile;
 import no.fintlabs.altinn.database.InstanceRepository;
-import no.fintlabs.kafka.consuming.ListenerConfiguration;
-import no.fintlabs.kafka.consuming.OffsetSeekingTrigger;
-import no.fintlabs.kafka.consuming.ParameterizedListenerContainerFactoryService;
-import no.fintlabs.kafka.topic.EventTopicService;
-import no.fintlabs.kafka.topic.configuration.CleanupFrequency;
-import no.fintlabs.kafka.topic.configuration.EventTopicConfiguration;
-import no.fintlabs.kafka.topic.name.EventTopicNameParameters;
-import no.fintlabs.kafka.topic.name.TopicNamePrefixParameters;
+import no.novari.kafka.consuming.*;
+import no.novari.kafka.topic.EventTopicService;
+import no.novari.kafka.topic.configuration.EventCleanupFrequency;
+import no.novari.kafka.topic.configuration.EventTopicConfiguration;
+import no.novari.kafka.topic.name.EventTopicNameParameters;
+import no.novari.kafka.topic.name.TopicNamePrefixParameters;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.kafka.listener.CommonLoggingErrorHandler;
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
+
 
 import java.time.Duration;
 import java.util.List;
@@ -46,19 +44,21 @@ public class EbevisConsentAcceptedConsumer {
     private final AltinnInstanceService altinnInstanceService;
     private final InstanceProducer instanceProducer;
     private final InstanceRepository instanceRepository;
+    private final ErrorHandlerFactory errorHandlerFactory;
 
-    public EbevisConsentAcceptedConsumer(EventTopicService eventTopicService, AltinnInstanceService altinnInstanceService, InstanceProducer instanceProducer, InstanceRepository instanceRepository) {
+    public EbevisConsentAcceptedConsumer(EventTopicService eventTopicService, AltinnInstanceService altinnInstanceService, InstanceProducer instanceProducer, InstanceRepository instanceRepository, ErrorHandlerFactory errorHandlerFactory) {
         this.eventTopicService = eventTopicService;
         this.altinnInstanceService = altinnInstanceService;
         this.instanceProducer = instanceProducer;
         this.instanceRepository = instanceRepository;
+        this.errorHandlerFactory = errorHandlerFactory;
     }
 
     @Bean
     public ConcurrentMessageListenerContainer<String, KafkaEvidenceConsentAccepted> kafkaListenerContainerFactory(
             ParameterizedListenerContainerFactoryService parameterizedListenerContainerFactoryService) {
 
-        TopicNamePrefixParameters topicNamePrefixParameters = TopicNamePrefixParameters.builder()
+        TopicNamePrefixParameters topicNamePrefixParameters = TopicNamePrefixParameters.stepBuilder()
                 .orgId(orgId.replace(".", "-"))
                 .domainContextApplicationDefault()
                 .build();
@@ -69,26 +69,34 @@ public class EbevisConsentAcceptedConsumer {
                 .topicNamePrefixParameters(topicNamePrefixParameters)
                 .build();
 
-        EventTopicConfiguration eventTopicConfiguration = EventTopicConfiguration.builder()
+        EventTopicConfiguration eventTopicConfiguration = EventTopicConfiguration.stepBuilder()
+                .partitions(1)
                 .retentionTime(Duration.ZERO)
-                .cleanupFrequency(CleanupFrequency.NORMAL)
+                .cleanupFrequency(EventCleanupFrequency.NORMAL)
                 .build();
 
         eventTopicService.createOrModifyTopic(eventTopicNameParameters, eventTopicConfiguration);
 
-        ListenerConfiguration<KafkaEvidenceConsentAccepted> listenerConfiguration = ListenerConfiguration.builder(KafkaEvidenceConsentAccepted.class)
+        ListenerConfiguration listenerConfiguration = ListenerConfiguration.stepBuilder()    //  .builder(KafkaEvidenceConsentAccepted.class)
                 .groupIdApplicationDefault()
                 .maxPollRecordsKafkaDefault()
                 .maxPollIntervalKafkaDefault()
-                .errorHandler(new CommonLoggingErrorHandler())
                 .continueFromPreviousOffsetOnAssignment()
                 .offsetSeekingTrigger(new OffsetSeekingTrigger())
                 .build();
 
         ConcurrentMessageListenerContainer<String, KafkaEvidenceConsentAccepted> container =
                 parameterizedListenerContainerFactoryService.createRecordListenerContainerFactory(
+                                KafkaEvidenceConsentAccepted.class,
                                 this::processMessage,
-                                listenerConfiguration)
+                                listenerConfiguration,
+                                errorHandlerFactory.createErrorHandler(
+                                        ErrorHandlerConfiguration
+                                                .stepBuilder()
+                                                .noRetries()
+                                                .skipFailedRecords()
+                                                .build()
+                                ))
                         .createContainer(eventTopicNameParameters);
 
         container.setAutoStartup(true);
