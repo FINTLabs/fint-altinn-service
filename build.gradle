@@ -6,7 +6,7 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.53.0'
 }
 
-group = 'no.fintlabs'
+group = 'no.novari'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -45,12 +45,12 @@ dependencies {
     implementation 'io.netty:netty-resolver-dns-native-macos:4.1.101.Final:osx-aarch_64'
 
     implementation 'org.springframework.kafka:spring-kafka'
-    implementation 'no.fintlabs:fint-kafka:5.0.0-rc-15'
+    implementation 'no.novari:kafka:5.1.0-rc-1'
 
     runtimeOnly 'org.postgresql:postgresql'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.flywaydb:flyway-database-postgresql:11.14.1'
-    implementation 'org.flywaydb:flyway-core:11.14.1'
+    implementation 'org.flywaydb:flyway-database-postgresql:11.17.1'
+    implementation 'org.flywaydb:flyway-core:11.17.1'
 
     implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.4'
     implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.6'
