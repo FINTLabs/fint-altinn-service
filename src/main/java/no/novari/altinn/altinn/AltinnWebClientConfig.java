@@ -26,8 +26,8 @@ public class AltinnWebClientConfig {
     }
 
     @Bean
-    public WebClient altinnWebClient(WebClient.Builder builder) {
-        return builder
+    public WebClient altinnWebClient() {
+        return WebClient.builder()
                 .filter(this::maskinportenAuthorization)
                 .baseUrl(baseUrl)
                 .build();
