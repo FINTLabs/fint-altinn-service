@@ -54,7 +54,6 @@ public class AltinnInstanceSheduled {
                 .collectList()
                 .doOnSuccess(list -> log.info("Fetched {} new altinn instance(s).", list.size()))
                 .subscribe();
-
     }
 
     private boolean isNew(AltinnInstance altinnInstanse) {

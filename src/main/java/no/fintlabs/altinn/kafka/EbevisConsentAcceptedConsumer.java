@@ -23,7 +23,6 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
@@ -36,9 +35,6 @@ public class EbevisConsentAcceptedConsumer {
 
     @Value("${fint.org-id}")
     private String orgId;
-
-    @Value("${spring.kafka.consumer.group-id}")
-    private String groupId;
 
     private final EventTopicService eventTopicService;
     private final AltinnInstanceService altinnInstanceService;
@@ -77,7 +73,7 @@ public class EbevisConsentAcceptedConsumer {
 
         eventTopicService.createOrModifyTopic(eventTopicNameParameters, eventTopicConfiguration);
 
-        ListenerConfiguration listenerConfiguration = ListenerConfiguration.stepBuilder()    //  .builder(KafkaEvidenceConsentAccepted.class)
+        ListenerConfiguration listenerConfiguration = ListenerConfiguration.stepBuilder()
                 .groupIdApplicationDefault()
                 .maxPollRecordsKafkaDefault()
                 .maxPollIntervalKafkaDefault()
