@@ -11,8 +11,8 @@ server:
 
 logging:
   level:
-    no.fintlabs: debug
-    no.fintlabs.altinn.maskinporten: info
+    no.novari: debug
+    no.novari.altinn.maskinporten: info
     org.springframework.kafka.core: error
     org.apache.kafka.clients: error
 
