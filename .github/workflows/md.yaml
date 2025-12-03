@@ -56,7 +56,7 @@ jobs:
           echo "Resource group: ${{ steps.rg.outputs.result }}"
           echo "Environment: ${{ steps.environment.outputs.result }}"
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Log in to the Container registry
         uses: docker/login-action@v3
