@@ -5,15 +5,14 @@ import no.novari.altinn.maskinporten.MaskinportenService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.function.client.ClientRequest;
-import org.springframework.web.reactive.function.client.ClientResponse;
-import org.springframework.web.reactive.function.client.ExchangeFunction;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.*;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @Configuration
 public class AltinnWebClientConfig {
+
+    private static final int MAX_IN_MEMORY_SIZE = 50 * 1024 * 1024;
 
     private final MaskinportenService maskinportenService;
 
@@ -27,7 +26,13 @@ public class AltinnWebClientConfig {
 
     @Bean
     public WebClient altinnWebClient() {
+        ExchangeStrategies strategies = ExchangeStrategies.builder()
+                .codecs(clientCodecConfigurer ->
+                        clientCodecConfigurer.defaultCodecs().maxInMemorySize(MAX_IN_MEMORY_SIZE))
+                .build();
+
         return WebClient.builder()
+                .exchangeStrategies(strategies)
                 .filter(this::maskinportenAuthorization)
                 .baseUrl(baseUrl)
                 .build();
