@@ -1,0 +1,67 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: ofk-no
+
+resources:
+  - ../../../base
+
+labels:
+  - pairs:
+      fintlabs.no/org-id: ofk.no
+
+patches:
+  - patch: |-
+      - op: replace
+        path: "/spec/orgId"
+        value: "ofk.no"
+      
+      - op: replace
+        path: "/spec/kafka/acls/0/topic"
+        value: "ofk-no.altinn.*"
+        
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.county-organization-number"
+          value: "930580694"
+      
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.county-number"
+          value: "31"
+      
+      - op: add
+        path: "/spec/env/-"
+        value:
+          name: "fint.org-id"
+          value: "ofk.no"
+          
+      - op: add
+        path: "/spec/env/-"
+        value: 
+          name: "fint.altinn.ebevis.api.base-url"
+          value: "http://altinn-ebevis-service.default:8080"
+
+      - op: add
+        path: "/spec/env/-"
+        value: 
+          name: "fint.altinn.platform.base-url"
+          value: "https://platform.altinn.no"
+
+      - op: add
+        path: "/spec/url/basePath"
+        value: "/"
+
+      - op: replace
+        path: "/spec/ingress/basePath"
+        value: "/api"
+        
+     - op: replace
+        path: "/spec/onePassword/itemPath"
+        value: "vaults/aks-api-vault/items/altinn-service"
+
+    target:
+      kind: Application
+      name: fint-altinn-service
