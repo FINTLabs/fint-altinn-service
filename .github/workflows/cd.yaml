@@ -52,14 +52,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [ ofk-no, bfk-no ]
+        org: [ bfk-no, ofk-no, mrfylke-no, trondelagfylke-no, agderfk-no ]
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include:
           - cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
         exclude:
+          - org: mrfylke-no
+            cluster: aks-beta-fint-2021-11-23
           - org: ofk-no
             cluster: aks-api-fint-2022-02-08
+
 
     steps:
       - uses: actions/checkout@v6
