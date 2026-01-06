@@ -28,7 +28,7 @@ class AltinnInstanceMapperTest {
         ApplicationVirksomhet virksomhet = new ApplicationVirksomhet();
         setField(virksomhet, "fylke", fylke);
 
-        ApplicationModel applicationModel = new ApplicationModel();
+        DrosjesentralApplicationModel applicationModel = new DrosjesentralApplicationModel();
         setField(applicationModel, "virksomhet", virksomhet);
 
         ApplicationDagligLeder dagligLeder = new ApplicationDagligLeder();
@@ -37,7 +37,7 @@ class AltinnInstanceMapperTest {
         setField(dagligLeder, "etternavn", "Nordmann");
         setField(applicationModel, "dagligLeder", dagligLeder);
 
-        KafkaAltinnInstance result = AltinnInstanceMapper.mapToAltinnInstance(altinnInstance, applicationModel);
+        KafkaAltinnInstance result = AltinnInstanceMapper.mapToDrosesentralAltinnInstance(altinnInstance, applicationModel);
 
         assertThat(result.getInstanceId()).isEqualTo("instance-123");
         assertThat(result.getOrganizationNumber()).isEqualTo("123456789");
@@ -46,8 +46,19 @@ class AltinnInstanceMapperTest {
     }
 
     private void setField(Object target, String fieldName, Object value) throws Exception {
-        Field field = target.getClass().getDeclaredField(fieldName);
+        Field field = findField(target.getClass(), fieldName);
         field.setAccessible(true);
         field.set(target, value);
+    }
+
+    private Field findField(Class<?> clazz, String fieldName) throws NoSuchFieldException {
+        while (clazz != null) {
+            try {
+                return clazz.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException e) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+        throw new NoSuchFieldException(fieldName);
     }
 }

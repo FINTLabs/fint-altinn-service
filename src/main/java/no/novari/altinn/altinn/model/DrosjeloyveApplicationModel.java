@@ -9,22 +9,26 @@ import lombok.Data;
 @XmlRootElement(name = "Datamodell")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
-public class ApplicationModel {
+public class DrosjeloyveApplicationModel extends AltinnApplicationModel {
+
     @XmlElement
-    private ApplicationVirksomhet virksomhet;
-    
+    private int antallDrosjeloyver;
+
     @XmlElement
-    private ApplicationDagligLeder dagligLeder;
-    
+    private boolean bekreftelseMeldingOmSamtykke;
+
     @XmlElement
-    private boolean bekreftelseOkonomiOgVandel;
-    
+    private boolean bekreftelseOkonomiskGaranti;
+
     @XmlElement
-    private boolean bekreftelseKjentMedSentralensPlikter;
-    
+    private boolean annenTransportleder;
+
     @XmlElement
-    private boolean bekreftelseSentralePlikter9d;
-    
+    private ApplicationTransportleder transportLeder;
+
     @XmlElement
-    private String virksomhetFlereFylker;
+    private boolean bekreftelseTransportleder;
+
+    @XmlElement
+    private String forklaringTransportleder;
 }

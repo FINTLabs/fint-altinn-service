@@ -3,8 +3,8 @@ package no.novari.altinn.altinn;
 import lombok.extern.slf4j.Slf4j;
 import no.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.fint.altinn.model.kafka.KafkaEvidenceConsentRequest;
+import no.novari.altinn.altinn.model.AltinnApplicationModel;
 import no.novari.altinn.altinn.model.AltinnInstance;
-import no.novari.altinn.altinn.model.ApplicationModel;
 import no.novari.altinn.database.Instance;
 import no.novari.altinn.database.InstanceRepository;
 import no.novari.altinn.kafka.EbevisConsentRequestProducer;
@@ -61,15 +61,15 @@ public class AltinnInstanceSheduled {
                 .noneMatch(instance -> instance.getInstanceId().equals(altinnInstanse.getId()));
     }
 
-    private Mono<Tuple2<AltinnInstance, ApplicationModel>> requestApplicationData(AltinnInstance altinnInstance) {
+    private Mono<Tuple2<AltinnInstance, AltinnApplicationModel>> requestApplicationData(AltinnInstance altinnInstance) {
         return Mono.zip(Mono.just(altinnInstance), altinnInstanceService.getApplicationData(altinnInstance));
     }
 
-    private boolean onlyInstancesForConfiguredCounty(Tuple2<AltinnInstance, ApplicationModel> tuple2) {
+    private boolean onlyInstancesForConfiguredCounty(Tuple2<AltinnInstance, ? extends AltinnApplicationModel> tuple2) {
         return tuple2.getT2().getVirksomhet().getFylke().getFylkesnummer().equals(countyNumber);
     }
 
-    private Tuple2<AltinnInstance, ApplicationModel> publishEbevisConcentRequest(Tuple2<AltinnInstance, ApplicationModel> tuple) {
+    private Tuple2<AltinnInstance, ? extends AltinnApplicationModel> publishEbevisConcentRequest(Tuple2<AltinnInstance, ? extends AltinnApplicationModel> tuple) {
 
         KafkaAltinnInstance kafkaAltinnInstance = mapToAltinnInstance(tuple.getT1(), tuple.getT2());
 

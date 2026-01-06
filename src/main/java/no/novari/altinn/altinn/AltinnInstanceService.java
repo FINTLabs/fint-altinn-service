@@ -1,9 +1,10 @@
 package no.novari.altinn.altinn;
 
 import lombok.extern.slf4j.Slf4j;
+import no.novari.altinn.altinn.model.AltinnApplicationModel;
 import no.novari.altinn.altinn.model.AltinnInstance;
 import no.novari.altinn.altinn.model.AltinnInstanceModel;
-import no.novari.altinn.altinn.model.ApplicationModel;
+import no.novari.altinn.altinn.model.DrosjesentralApplicationModel;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.xml.Jaxb2XmlDecoder;
 import org.springframework.stereotype.Service;
@@ -25,12 +26,12 @@ public class AltinnInstanceService {
 
     public Mono<List<AltinnInstance>> getInstances() {
         return webClient.get()
-                .uri("/storage/api/v1/instances?appId=vigo/drosjesentral&status.isArchived=true")
+                .uri("/storage/api/v1/instances?org=vigo&status.isArchived=true")
                 .retrieve().bodyToMono(AltinnInstanceModel.class)
                 .map(AltinnInstanceModel::getInstances);
     }
 
-    public Mono<ApplicationModel> getApplicationData(AltinnInstance altinnInstance) {
+    public Mono<AltinnApplicationModel> getApplicationData(AltinnInstance altinnInstance) {
         return Mono.defer(() -> altinnInstance.getData().stream()
                 .filter(data -> data.getDataType().equals("Datamodell"))
                 .findFirst()
@@ -44,7 +45,7 @@ public class AltinnInstanceService {
                         .uri(uri)
                         .accept(MediaType.APPLICATION_XML)
                         .retrieve()
-                        .bodyToMono(ApplicationModel.class))
+                        .bodyToMono(DrosjesentralApplicationModel.class))
                 .orElseGet(() -> {
                     log.warn("No matching Datamodell found in instance {}", altinnInstance.getId());
                     return Mono.empty();

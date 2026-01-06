@@ -56,7 +56,7 @@ jobs:
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include:
           - cluster: aks-beta-fint-2021-11-23
-            deploy-every-branch: true
+            deploy-every-branch: false
         exclude:
           - org: mrfylke-no
             cluster: aks-beta-fint-2021-11-23
