@@ -69,6 +69,7 @@ public class AltinnInstanceSheduled {
         return tuple2.getT2().getVirksomhet().getFylke().getFylkesnummer().equals(countyNumber);
     }
 
+    // TODO Consider refactor to void (some day) as we never use the return value
     private Tuple2<AltinnInstance, ? extends AltinnApplicationModel> publishEbevisConcentRequest(Tuple2<AltinnInstance, ? extends AltinnApplicationModel> tuple) {
 
         KafkaAltinnInstance kafkaAltinnInstance = mapToAltinnInstance(tuple.getT1(), tuple.getT2());
