@@ -73,8 +73,9 @@ public class AltinnInstanceSheduled {
 
         KafkaAltinnInstance kafkaAltinnInstance = mapToAltinnInstance(tuple.getT1(), tuple.getT2());
 
-        log.info("{}: New instance received from organizationNumber {} with organizationName {} in county {} and orgId {}",
+        log.info("{}: New instance with appId {} received from organizationNumber {} with organizationName {} in county {} and orgId {}",
                 kafkaAltinnInstance.getInstanceId(),
+                kafkaAltinnInstance.getAppId(),
                 kafkaAltinnInstance.getOrganizationNumber(),
                 kafkaAltinnInstance.getOrganizationName(),
                 kafkaAltinnInstance.getCountyName(),
@@ -82,6 +83,7 @@ public class AltinnInstanceSheduled {
 
         KafkaEvidenceConsentRequest kafkaEvidenceRequest = KafkaEvidenceConsentRequest.builder()
                 .altinnInstanceId(kafkaAltinnInstance.getInstanceId())
+                .altinnAppId(kafkaAltinnInstance.getAppId())
                 .organizationNumber(kafkaAltinnInstance.getOrganizationNumber())
                 .organizationName(kafkaAltinnInstance.getOrganizationName())
                 .fintOrgId(orgId)
