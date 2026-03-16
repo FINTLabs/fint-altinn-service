@@ -23,6 +23,7 @@ public class AltinnInstanceMapper {
     public static KafkaAltinnInstance mapToDrosesentralAltinnInstance(AltinnInstance instanceFromAltinn, DrosjesentralApplicationModel applicationModel) {
         return KafkaAltinnInstance.builder()
                 .instanceId(instanceFromAltinn.getId())
+                .appId(instanceFromAltinn.getAppId())
                 .fintOrgId(orgIdMapper(applicationModel.getVirksomhet().getFylke().getFylkesnummer()))
 
                 .organizationNumber(instanceFromAltinn.getInstanceOwner().getOrganisationNumber())
@@ -83,6 +84,7 @@ public class AltinnInstanceMapper {
     public static KafkaAltinnInstance mapToDrosesloyveAltinnInstance(AltinnInstance instanceFromAltinn, DrosjeloyveApplicationModel applicationModel) {
         return KafkaAltinnInstance.builder()
                 .instanceId(instanceFromAltinn.getId())
+                .appId(instanceFromAltinn.getAppId())
                 .fintOrgId(orgIdMapper(applicationModel.getVirksomhet().getFylke().getFylkesnummer()))
 
                 .organizationNumber(instanceFromAltinn.getInstanceOwner().getOrganisationNumber())
