@@ -32,7 +32,7 @@ public class AltinnInstanceService {
                 .uri("/storage/api/v1/instances?org=vigo&status.isArchived=true&lastChanged=gt:" + oneWeekAgo)
                 .retrieve().bodyToMono(AltinnInstanceModel.class)
                 .map(AltinnInstanceModel::getInstances)
-                .doOnNext(instances -> log.debug("Fetched {} Altinn instance(s) from the past week.", instances.size()));
+                .doOnNext(instances -> log.debug("Found {} Altinn instance(s) from the past week.", instances.size()));
     }
 
     public Mono<AltinnApplicationModel> getApplicationData(AltinnInstance altinnInstance) {
