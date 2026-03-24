@@ -29,7 +29,7 @@ public class AltinnInstanceService {
         String oneWeekAgo = LocalDate.now().minusWeeks(1).toString();
 
         return webClient.get()
-                .uri("/storage/api/v1/instances?org=vigo&status.isArchived=true&lastChanged=gt:" + oneWeekAgo)
+                .uri("/storage/api/v1/instances?org=vigo&excludeConfirmedBy=vigo&status.isArchived=true&lastChanged=gt:" + oneWeekAgo)
                 .retrieve().bodyToMono(AltinnInstanceModel.class)
                 .map(AltinnInstanceModel::getInstances)
                 .doOnNext(instances -> log.debug("Found {} Altinn instance(s) from the past week.", instances.size()));
