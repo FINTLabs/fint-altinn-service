@@ -19,7 +19,7 @@ import static no.novari.altinn.altinn.AltinnInstanceMapper.mapToAltinnInstance;
 
 @Slf4j
 @Component
-public class AltinnInstanceSheduled {
+public class AltinnInstanceScheduled {
 
     @Value("${fint.county-number}")
     private String countyNumber;
@@ -34,8 +34,8 @@ public class AltinnInstanceSheduled {
     private final InstanceRepository instanceRepository;
     private final EbevisConsentRequestProducer consentRequestProducer;
 
-    public AltinnInstanceSheduled(AltinnInstanceService altinnInstanceService, InstanceRepository instanceRepository,
-                                  EbevisConsentRequestProducer consentRequestProducer) {
+    public AltinnInstanceScheduled(AltinnInstanceService altinnInstanceService, InstanceRepository instanceRepository,
+                                   EbevisConsentRequestProducer consentRequestProducer) {
         this.altinnInstanceService = altinnInstanceService;
         this.instanceRepository = instanceRepository;
         this.consentRequestProducer = consentRequestProducer;
@@ -43,7 +43,7 @@ public class AltinnInstanceSheduled {
 
     @Scheduled(cron = "0 */10 * * * ?")
     public void getAltinnInstances() {
-        log.info("⏱️ Scheduled fetching of altinn instances");
+        log.info("⏱️ Scheduled fetching of Altinn instances");
 
         altinnInstanceService.getInstances()
                 .flatMapMany(Flux::fromIterable)
