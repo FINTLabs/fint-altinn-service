@@ -56,9 +56,9 @@ public class AltinnInstanceScheduled {
                 .subscribe();
     }
 
-    private boolean isNew(AltinnInstance altinnInstanse) {
+    private boolean isNew(AltinnInstance altinnInstance) {
         return instanceRepository.findAllInstances().stream()
-                .noneMatch(instance -> instance.getInstanceId().equals(altinnInstanse.getId()));
+                .noneMatch(instance -> instance.getInstanceId().equals(altinnInstance.getId()));
     }
 
     private Mono<Tuple2<AltinnInstance, AltinnApplicationModel>> requestApplicationData(AltinnInstance altinnInstance) {
