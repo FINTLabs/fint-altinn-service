@@ -52,8 +52,10 @@ public class AltinnInstanceScheduled {
                 .filter(this::onlyInstancesForConfiguredCounty)
                 .doOnNext(this::publishEbevisConcentRequest)
                 .collectList()
-                .doOnSuccess(list -> log.info("Fetched {} new altinn instance(s).", list.size()))
-                .subscribe();
+                .subscribe(
+                        list -> log.info("Processed {} new altinn instance(s).", list.size()),
+                        error -> log.error("Error processing Altinn instances.", error)
+                );
     }
 
     private boolean isNew(AltinnInstance altinnInstance) {
