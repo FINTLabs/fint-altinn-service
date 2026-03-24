@@ -12,6 +12,7 @@ import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -25,10 +26,13 @@ public class AltinnInstanceService {
     }
 
     public Mono<List<AltinnInstance>> getInstances() {
+        String oneWeekAgo = LocalDate.now().minusWeeks(1).toString();
+
         return webClient.get()
-                .uri("/storage/api/v1/instances?org=vigo&status.isArchived=true")
+                .uri("/storage/api/v1/instances?org=vigo&status.isArchived=true&lastChanged=gt:" + oneWeekAgo)
                 .retrieve().bodyToMono(AltinnInstanceModel.class)
-                .map(AltinnInstanceModel::getInstances);
+                .map(AltinnInstanceModel::getInstances)
+                .doOnNext(instances -> log.debug("Fetched {} Altinn instance(s) from the past week.", instances.size()));
     }
 
     public Mono<AltinnApplicationModel> getApplicationData(AltinnInstance altinnInstance) {
