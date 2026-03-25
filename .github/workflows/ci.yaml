@@ -19,8 +19,6 @@ jobs:
           distribution: 'corretto'
           cache: 'gradle'
 
-      - uses: gradle/wrapper-validation-action@v3
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
 
