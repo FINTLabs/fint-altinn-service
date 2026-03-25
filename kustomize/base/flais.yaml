@@ -15,7 +15,7 @@ spec:
   port: 8080
   imagePullPolicy: Always
   orgId: fintlabs.no
-  image: ghcr.io/fintlabs/fint-altinn-service
+  image: ghcr.io/fintlabs/fint-altinn-service:DUMMY
   kafka:
     enabled: true
     acls:
