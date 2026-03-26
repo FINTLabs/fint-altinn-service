@@ -102,24 +102,8 @@ jobs:
             echo "To deploy, merge to ${{ github.event.repository.default_branch }}." 
           } >> $GITHUB_STEP_SUMMARY
 
-      - name: Select deploy image
-        id: image
-        run: |
-          TAGS="${{ needs.build-and-publish.outputs.tags }}"
-      
-          echo "All tags:"
-          echo "$TAGS" | tr ',' '\n'
-      
-          if [[ "${GITHUB_REF}" == "refs/heads/${{ github.event.repository.default_branch }}" ]]; then
-            echo "Selecting date-based named tag for default branch"
-            IMAGE=$(echo "$TAGS" | tr ',' '\n' | grep -E ':[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-f0-9]+' | head -n1)
-          else
-            echo "Selecting branch-based named tag"
-            IMAGE=$(echo "$TAGS" | tr ',' '\n' | grep -E ':[^:]+-[a-f0-9]{7,}$' | head -n1)
-          fi
-      
-          echo "Selected image: $IMAGE"
-          echo "IMAGE=$IMAGE" >> $GITHUB_OUTPUT
+      - run: |
+          echo "Tags: ${{ needs.build-and-publish.outputs.tags }}" 
 
       - name: Deploy to Kubernetes
         if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) || matrix.deploy-every-branch == true
@@ -127,5 +111,5 @@ jobs:
         with:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
-          images: ${{ steps.image.outputs.IMAGE }}
+          images: ${{ needs.build-and-publish.outputs.tags }}
           namespace: ${{ matrix.org }}
