@@ -13,14 +13,14 @@ public class AltinnInstanceMapper {
 
     public static KafkaAltinnInstance mapToAltinnInstance(AltinnInstance instanceFromAltinn, AltinnApplicationModel applicationModel) {
         if (applicationModel instanceof DrosjesentralApplicationModel model) {
-            return mapToDrosesentralAltinnInstance(instanceFromAltinn, model);
+            return mapToDrosjesentralAltinnInstance(instanceFromAltinn, model);
         } else if (applicationModel instanceof DrosjeloyveApplicationModel model) {
-            return mapToDrosesloyveAltinnInstance(instanceFromAltinn, model);
+            return mapToDrosjeloyveAltinnInstance(instanceFromAltinn, model);
         }
         throw new IllegalArgumentException("Unknown application model type: " + applicationModel.getClass().getName());
     }
 
-    public static KafkaAltinnInstance mapToDrosesentralAltinnInstance(AltinnInstance instanceFromAltinn, DrosjesentralApplicationModel applicationModel) {
+    public static KafkaAltinnInstance mapToDrosjesentralAltinnInstance(AltinnInstance instanceFromAltinn, DrosjesentralApplicationModel applicationModel) {
         return KafkaAltinnInstance.builder()
                 .instanceId(instanceFromAltinn.getId())
                 .appId(instanceFromAltinn.getAppId())
@@ -81,7 +81,7 @@ public class AltinnInstanceMapper {
                 .build();
     }
 
-    public static KafkaAltinnInstance mapToDrosesloyveAltinnInstance(AltinnInstance instanceFromAltinn, DrosjeloyveApplicationModel applicationModel) {
+    public static KafkaAltinnInstance mapToDrosjeloyveAltinnInstance(AltinnInstance instanceFromAltinn, DrosjeloyveApplicationModel applicationModel) {
         return KafkaAltinnInstance.builder()
                 .instanceId(instanceFromAltinn.getId())
                 .appId(instanceFromAltinn.getAppId())
@@ -138,6 +138,21 @@ public class AltinnInstanceMapper {
                 .managerPhone(Optional.ofNullable(applicationModel.getDagligLeder())
                         .map(ApplicationDagligLeder::getKontaktinformasjon)
                         .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMTPY_STRING))
+
+                .transportmanagerSocialSecurityNumber(Optional.ofNullable(applicationModel.getTransportLeder())
+                        .map(ApplicationTransportleder::getFodselsnummer).orElse(EMTPY_STRING))
+                .transportmanagerFirstName(Optional.ofNullable(applicationModel.getTransportLeder())
+                        .map(ApplicationTransportleder::getFornavn).orElse(EMTPY_STRING))
+                .transportmanagerLastName(Optional.ofNullable(applicationModel.getTransportLeder())
+                        .map(ApplicationTransportleder::getEtternavn).orElse(EMTPY_STRING))
+                .transportmanagerEmail(Optional.ofNullable(applicationModel.getTransportLeder())
+                        .map(ApplicationTransportleder::getKontaktinformasjon)
+                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMTPY_STRING))
+                .transportmanagerPhone(Optional.ofNullable(applicationModel.getTransportLeder())
+                        .map(ApplicationTransportleder::getKontaktinformasjon)
+                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMTPY_STRING))
+                .transportmanagerAffiliation(Optional.ofNullable(applicationModel.getTransportLeder())
+                        .map(ApplicationTransportleder::getTilknytning).orElse(EMTPY_STRING))
 
                 .build();
     }
