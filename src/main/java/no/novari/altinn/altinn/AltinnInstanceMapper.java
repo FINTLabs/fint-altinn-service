@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class AltinnInstanceMapper {
 
-    public static final String EMTPY_STRING = "";
+    public static final String EMPTY_STRING = "";
 
     public static KafkaAltinnInstance mapToAltinnInstance(AltinnInstance instanceFromAltinn, AltinnApplicationModel applicationModel) {
         if (applicationModel instanceof DrosjesentralApplicationModel model) {
@@ -34,38 +34,38 @@ public class AltinnInstanceMapper {
 
                 .municipalityNumber(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKommune)
-                        .map(ApplicationKommune::getKommunenummer).orElse(EMTPY_STRING))
+                        .map(ApplicationKommune::getKommunenummer).orElse(EMPTY_STRING))
                 .municipalityName(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKommune)
-                        .map(ApplicationKommune::getKommunenavn).orElse(EMTPY_STRING))
+                        .map(ApplicationKommune::getKommunenavn).orElse(EMPTY_STRING))
 
                 .companyEmail(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMTPY_STRING))
+                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMPTY_STRING))
 
                 .companyPhone(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMTPY_STRING))
+                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMPTY_STRING))
 
                 .companyAdressStreet(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getForretningsadresse)
-                        .map(ApplicationAdresse::getAdresse).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getAdresse).orElse(EMPTY_STRING))
                 .companyAdressPostcode(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getForretningsadresse)
-                        .map(ApplicationAdresse::getPostnummer).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getPostnummer).orElse(EMPTY_STRING))
                 .companyAdressPostplace(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getForretningsadresse)
-                        .map(ApplicationAdresse::getPoststed).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getPoststed).orElse(EMPTY_STRING))
 
                 .postalAdressStreet(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getPostadresse)
-                        .map(ApplicationAdresse::getAdresse).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getAdresse).orElse(EMPTY_STRING))
                 .postalAdressPostcode(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getPostadresse)
-                        .map(ApplicationAdresse::getPostnummer).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getPostnummer).orElse(EMPTY_STRING))
                 .postalAdressPostplace(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getPostadresse)
-                        .map(ApplicationAdresse::getPoststed).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getPoststed).orElse(EMPTY_STRING))
 
                 .managerSocialSecurityNumber(applicationModel.getDagligLeder().getFodselsnummer())
                 .managerFirstName(applicationModel.getDagligLeder().getFornavn())
@@ -73,10 +73,10 @@ public class AltinnInstanceMapper {
 
                 .managerEmail(Optional.ofNullable(applicationModel.getDagligLeder())
                         .map(ApplicationDagligLeder::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMTPY_STRING))
+                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMPTY_STRING))
                 .managerPhone(Optional.ofNullable(applicationModel.getDagligLeder())
                         .map(ApplicationDagligLeder::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMTPY_STRING))
+                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMPTY_STRING))
 
                 .build();
     }
@@ -95,38 +95,38 @@ public class AltinnInstanceMapper {
 
                 .municipalityNumber(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKommune)
-                        .map(ApplicationKommune::getKommunenummer).orElse(EMTPY_STRING))
+                        .map(ApplicationKommune::getKommunenummer).orElse(EMPTY_STRING))
                 .municipalityName(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKommune)
-                        .map(ApplicationKommune::getKommunenavn).orElse(EMTPY_STRING))
+                        .map(ApplicationKommune::getKommunenavn).orElse(EMPTY_STRING))
 
                 .companyEmail(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMTPY_STRING))
+                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMPTY_STRING))
 
                 .companyPhone(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMTPY_STRING))
+                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMPTY_STRING))
 
                 .companyAdressStreet(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getForretningsadresse)
-                        .map(ApplicationAdresse::getAdresse).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getAdresse).orElse(EMPTY_STRING))
                 .companyAdressPostcode(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getForretningsadresse)
-                        .map(ApplicationAdresse::getPostnummer).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getPostnummer).orElse(EMPTY_STRING))
                 .companyAdressPostplace(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getForretningsadresse)
-                        .map(ApplicationAdresse::getPoststed).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getPoststed).orElse(EMPTY_STRING))
 
                 .postalAdressStreet(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getPostadresse)
-                        .map(ApplicationAdresse::getAdresse).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getAdresse).orElse(EMPTY_STRING))
                 .postalAdressPostcode(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getPostadresse)
-                        .map(ApplicationAdresse::getPostnummer).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getPostnummer).orElse(EMPTY_STRING))
                 .postalAdressPostplace(Optional.ofNullable(applicationModel.getVirksomhet())
                         .map(ApplicationVirksomhet::getPostadresse)
-                        .map(ApplicationAdresse::getPoststed).orElse(EMTPY_STRING))
+                        .map(ApplicationAdresse::getPoststed).orElse(EMPTY_STRING))
 
                 .managerSocialSecurityNumber(applicationModel.getDagligLeder().getFodselsnummer())
                 .managerFirstName(applicationModel.getDagligLeder().getFornavn())
@@ -134,25 +134,25 @@ public class AltinnInstanceMapper {
 
                 .managerEmail(Optional.ofNullable(applicationModel.getDagligLeder())
                         .map(ApplicationDagligLeder::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMTPY_STRING))
+                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMPTY_STRING))
                 .managerPhone(Optional.ofNullable(applicationModel.getDagligLeder())
                         .map(ApplicationDagligLeder::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMTPY_STRING))
+                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMPTY_STRING))
 
                 .transportmanagerSocialSecurityNumber(Optional.ofNullable(applicationModel.getTransportLeder())
-                        .map(ApplicationTransportleder::getFodselsnummer).orElse(EMTPY_STRING))
+                        .map(ApplicationTransportleder::getFodselsnummer).orElse(EMPTY_STRING))
                 .transportmanagerFirstName(Optional.ofNullable(applicationModel.getTransportLeder())
-                        .map(ApplicationTransportleder::getFornavn).orElse(EMTPY_STRING))
+                        .map(ApplicationTransportleder::getFornavn).orElse(EMPTY_STRING))
                 .transportmanagerLastName(Optional.ofNullable(applicationModel.getTransportLeder())
-                        .map(ApplicationTransportleder::getEtternavn).orElse(EMTPY_STRING))
+                        .map(ApplicationTransportleder::getEtternavn).orElse(EMPTY_STRING))
                 .transportmanagerEmail(Optional.ofNullable(applicationModel.getTransportLeder())
                         .map(ApplicationTransportleder::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMTPY_STRING))
+                        .map(ApplicationKontaktinformasjon::getEpostadresse).orElse(EMPTY_STRING))
                 .transportmanagerPhone(Optional.ofNullable(applicationModel.getTransportLeder())
                         .map(ApplicationTransportleder::getKontaktinformasjon)
-                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMTPY_STRING))
+                        .map(ApplicationKontaktinformasjon::getTelefonnummer).orElse(EMPTY_STRING))
                 .transportmanagerAffiliation(Optional.ofNullable(applicationModel.getTransportLeder())
-                        .map(ApplicationTransportleder::getTilknytning).orElse(EMTPY_STRING))
+                        .map(ApplicationTransportleder::getTilknytning).orElse(EMPTY_STRING))
 
                 .build();
     }
