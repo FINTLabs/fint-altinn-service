@@ -1,7 +1,7 @@
 package no.novari.altinn.altinn;
 
-import no.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.novari.altinn.altinn.model.*;
+import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;

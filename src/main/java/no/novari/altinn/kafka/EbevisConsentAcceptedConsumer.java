@@ -1,14 +1,14 @@
 package no.novari.altinn.kafka;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.altinn.model.kafka.KafkaAltinnInstance;
-import no.fint.altinn.model.kafka.KafkaEvidenceConsentAccepted;
 import no.novari.altinn.altinn.AltinnInstanceService;
 import no.novari.altinn.altinn.model.AltinnApplicationModel;
 import no.novari.altinn.altinn.model.AltinnInstance;
 import no.novari.altinn.database.Instance;
 import no.novari.altinn.database.InstanceFile;
 import no.novari.altinn.database.InstanceRepository;
+import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
+import no.novari.fint.altinn.model.kafka.KafkaEvidenceConsentAccepted;
 import no.novari.kafka.consuming.*;
 import no.novari.kafka.topic.EventTopicService;
 import no.novari.kafka.topic.configuration.EventCleanupFrequency;

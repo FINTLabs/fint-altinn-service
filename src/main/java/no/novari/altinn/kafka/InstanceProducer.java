@@ -1,7 +1,7 @@
 package no.novari.altinn.kafka;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.altinn.model.kafka.KafkaAltinnInstance;
+import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.novari.kafka.producing.ParameterizedProducerRecord;
 import no.novari.kafka.producing.ParameterizedTemplate;
 import no.novari.kafka.producing.ParameterizedTemplateFactory;

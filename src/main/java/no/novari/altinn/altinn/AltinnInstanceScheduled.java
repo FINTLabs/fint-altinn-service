@@ -1,13 +1,13 @@
 package no.novari.altinn.altinn;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.altinn.model.kafka.KafkaAltinnInstance;
-import no.fint.altinn.model.kafka.KafkaEvidenceConsentRequest;
 import no.novari.altinn.altinn.model.AltinnApplicationModel;
 import no.novari.altinn.altinn.model.AltinnInstance;
 import no.novari.altinn.database.Instance;
 import no.novari.altinn.database.InstanceRepository;
 import no.novari.altinn.kafka.EbevisConsentRequestProducer;
+import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
+import no.novari.fint.altinn.model.kafka.KafkaEvidenceConsentRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -91,6 +91,7 @@ public class AltinnInstanceScheduled {
                 .organizationName(kafkaAltinnInstance.getOrganizationName())
                 .fintOrgId(orgId)
                 .countyOrganizationNumber(countyOrganizationNumber)
+                .countyOrganizationName(kafkaAltinnInstance.getCountyName())
                 .build();
 
         consentRequestProducer.publish(kafkaEvidenceRequest);
