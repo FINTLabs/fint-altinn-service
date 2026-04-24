@@ -5,16 +5,13 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @XmlRootElement(name = "Datamodell")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Data
-public class ApplicationModel {
-    @XmlElement
-    private ApplicationVirksomhet virksomhet;
-    
-    @XmlElement
-    private ApplicationDagligLeder dagligLeder;
+@EqualsAndHashCode(callSuper=false)
+public class DrosjesentralApplicationModel extends AltinnApplicationModel {
     
     @XmlElement
     private boolean bekreftelseOkonomiOgVandel;

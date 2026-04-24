@@ -1,14 +1,14 @@
 package no.novari.altinn.kafka;
 
 import lombok.extern.slf4j.Slf4j;
-import no.fint.altinn.model.kafka.KafkaAltinnInstance;
-import no.fint.altinn.model.kafka.KafkaEvidenceConsentAccepted;
 import no.novari.altinn.altinn.AltinnInstanceService;
+import no.novari.altinn.altinn.model.AltinnApplicationModel;
 import no.novari.altinn.altinn.model.AltinnInstance;
-import no.novari.altinn.altinn.model.ApplicationModel;
 import no.novari.altinn.database.Instance;
 import no.novari.altinn.database.InstanceFile;
 import no.novari.altinn.database.InstanceRepository;
+import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
+import no.novari.fint.altinn.model.kafka.KafkaEvidenceConsentAccepted;
 import no.novari.kafka.consuming.*;
 import no.novari.kafka.topic.EventTopicService;
 import no.novari.kafka.topic.configuration.EventCleanupFrequency;
@@ -103,20 +103,21 @@ public class EbevisConsentAcceptedConsumer {
         KafkaEvidenceConsentAccepted consentAccepted = message.value();
         log.info("Received consent accepted: {}", consentAccepted);
 
-        altinnInstanceService.getInstance(message.value().getAltinnInstanceId())
+        altinnInstanceService.getInstance(consentAccepted.getAltinnInstanceId(), consentAccepted.getAltinnAppId())
                 .flatMap(this::addApplicationMetadata)
                 .doOnSuccess(this::publishAndSave)
                 .subscribe();
 
     }
 
-    private void publishAndSave(Tuple2<AltinnInstance, ApplicationModel> altinnInstanceAndModel) {
+    private void publishAndSave(Tuple2<AltinnInstance, AltinnApplicationModel> altinnInstanceAndModel) {
         AltinnInstance altinnInstance = altinnInstanceAndModel.getT1();
-        ApplicationModel applicationModel = altinnInstanceAndModel.getT2();
+        AltinnApplicationModel applicationModel = altinnInstanceAndModel.getT2();
 
         log.info("{}: Publishing instance.", altinnInstance.getId());
 
         KafkaAltinnInstance kafkaAltinnInstance = mapToAltinnInstance(altinnInstance, applicationModel);
+
         instanceProducer.publish(kafkaAltinnInstance);
 
         final Instance instance = Optional.ofNullable(instanceRepository.findFirstByInstanceIdOrderByLastUpdatedDesc(altinnInstance.getId()))
@@ -148,8 +149,8 @@ public class EbevisConsentAcceptedConsumer {
         instanceRepository.saveInstance(instance);
     }
 
-    private Mono<Tuple2<AltinnInstance, ApplicationModel>> addApplicationMetadata(AltinnInstance altinnInstance) {
-        Mono<ApplicationModel> applicationData = altinnInstanceService.getApplicationData(altinnInstance);
+    private Mono<Tuple2<AltinnInstance, AltinnApplicationModel>> addApplicationMetadata(AltinnInstance altinnInstance) {
+        Mono<AltinnApplicationModel> applicationData = altinnInstanceService.getApplicationData(altinnInstance);
 
         return Mono.zip(Mono.just(altinnInstance), applicationData);
 
