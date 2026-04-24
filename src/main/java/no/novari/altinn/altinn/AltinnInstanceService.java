@@ -1,10 +1,7 @@
 package no.novari.altinn.altinn;
 
 import lombok.extern.slf4j.Slf4j;
-import no.novari.altinn.altinn.model.AltinnApplicationModel;
-import no.novari.altinn.altinn.model.AltinnInstance;
-import no.novari.altinn.altinn.model.AltinnInstanceModel;
-import no.novari.altinn.altinn.model.DrosjesentralApplicationModel;
+import no.novari.altinn.altinn.model.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.xml.Jaxb2XmlDecoder;
 import org.springframework.stereotype.Service;
@@ -14,10 +11,16 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
 public class AltinnInstanceService {
+
+    private static final Map<String, Class<? extends AltinnApplicationModel>> APP_ID_TO_MODEL = Map.of(
+            "vigo/drosjesentral", DrosjesentralApplicationModel.class,
+            "vigo/drosjeloyve", DrosjeloyveApplicationModel.class
+    );
 
     private final WebClient webClient;
 
@@ -36,6 +39,12 @@ public class AltinnInstanceService {
     }
 
     public Mono<AltinnApplicationModel> getApplicationData(AltinnInstance altinnInstance) {
+        Class<? extends AltinnApplicationModel> applicationModelClass = APP_ID_TO_MODEL.get(altinnInstance.getAppId());
+        if (applicationModelClass == null) {
+            log.warn("Unsupported appId {} for instance {}", altinnInstance.getAppId(), altinnInstance.getId());
+            return Mono.empty();
+        }
+
         return Mono.defer(() -> altinnInstance.getData().stream()
                 .filter(data -> data.getDataType().equals("Datamodell"))
                 .findFirst()
@@ -49,16 +58,17 @@ public class AltinnInstanceService {
                         .uri(uri)
                         .accept(MediaType.APPLICATION_XML)
                         .retrieve()
-                        .bodyToMono(DrosjesentralApplicationModel.class))
+                        .bodyToMono(applicationModelClass))
                 .orElseGet(() -> {
                     log.warn("No matching Datamodell found in instance {}", altinnInstance.getId());
                     return Mono.empty();
                 }));
     }
 
-    public Mono<AltinnInstance> getInstance(String instanceId) {
+    public Mono<AltinnInstance> getInstance(String instanceId, String altinnAppId) {
+
         return webClient.get()
-                .uri("/storage/api/v1/instances/" + instanceId + "?appId=vigo/drosjesentral")
+                .uri("/storage/api/v1/instances/" + instanceId + "?appId=" + altinnAppId)
                 .retrieve().bodyToMono(AltinnInstance.class);
     }
 }

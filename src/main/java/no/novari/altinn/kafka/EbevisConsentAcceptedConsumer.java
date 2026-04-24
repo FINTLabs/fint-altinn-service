@@ -103,7 +103,7 @@ public class EbevisConsentAcceptedConsumer {
         KafkaEvidenceConsentAccepted consentAccepted = message.value();
         log.info("Received consent accepted: {}", consentAccepted);
 
-        altinnInstanceService.getInstance(message.value().getAltinnInstanceId())
+        altinnInstanceService.getInstance(consentAccepted.getAltinnInstanceId(), consentAccepted.getAltinnAppId())
                 .flatMap(this::addApplicationMetadata)
                 .doOnSuccess(this::publishAndSave)
                 .subscribe();
