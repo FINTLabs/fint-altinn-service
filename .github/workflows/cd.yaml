@@ -64,9 +64,6 @@ jobs:
         exclude:
           - org: mrfylke-no
             cluster: aks-beta-fint-2021-11-23
-          - org: ofk-no
-            cluster: aks-api-fint-2022-02-08
-
 
     steps:
       - uses: actions/checkout@v6
