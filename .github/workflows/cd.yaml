@@ -30,7 +30,8 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           tags: |
-            type=raw,value=${{ steps.branch.outputs.shortname }}-{{sha}}
+            type=ref,event=branch,suffix=-{{sha}}
+            type=ref,event=pr,suffix=-{{sha}}
             type=sha,prefix={{date 'YYYY-MM-DD-'}},enable={{is_default_branch}}
             type=raw,value=latest,enable={{is_default_branch}}
 
@@ -40,6 +41,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
 
       - name: Build and push
         uses: docker/build-push-action@v7
@@ -115,11 +119,17 @@ jobs:
             echo "To deploy, merge to ${{ github.event.repository.default_branch }}." 
           } >> $GITHUB_STEP_SUMMARY
 
-      - name: Deploy to Kubernetes
-        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) || matrix.deploy-every-branch == true
-        uses: azure/k8s-deploy@v5.0.3
+      - name: Substitute image into baked YAML
+        id: substitute
+        uses: azure/k8s-artifact-substitute@v2.0.0
         with:
-          action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
           images: ${{ needs.build-and-publish.outputs.tags }}
+
+      - name: Deploy to Kubernetes
+        if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) || matrix.deploy-every-branch == true
+        uses: azure/k8s-deploy@v6.0.0
+        with:
+          action: deploy
+          manifests: ${{ steps.substitute.outputs.manifests }}
           namespace: ${{ matrix.org }}
