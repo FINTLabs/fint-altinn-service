@@ -126,5 +126,5 @@ jobs:
         with:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
-          images: ghcr.io/${{ github.repository }}:${{ needs.build-and-publish.outputs.version }}
+          images: ghcr.io/${{ toLower(github.repository) }}:${{ needs.build-and-publish.outputs.version }}
           namespace: ${{ matrix.org }}
