@@ -57,8 +57,8 @@ patches:
       - op: replace
         path: "/spec/ingress/basePath"
         value: "/api"
-        
-     - op: replace
+  
+      - op: replace
         path: "/spec/onePassword/itemPath"
         value: "vaults/aks-api-vault/items/altinn-service"
 
