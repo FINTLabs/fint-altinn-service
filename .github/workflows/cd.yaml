@@ -119,15 +119,17 @@ jobs:
             echo "To deploy, merge to ${{ github.event.repository.default_branch }}." 
           } >> $GITHUB_STEP_SUMMARY
 
-      - name: Replace image in baked manifest
-        run: |
-          export IMAGE=$(echo '${{ needs.build-and-publish.outputs.tags }}' | head -n1)
-          yq -i 'select(.kind == "Application").spec.image = strenv(IMAGE)' "${{ steps.bake.outputs.manifestsBundle }}"
+      - name: Substitute image into baked YAML
+        id: substitute
+        uses: azure/k8s-artifact-substitute@v2.0.0
+        with:
+          manifests: ${{ steps.bake.outputs.manifestsBundle }}
+          images: ${{ needs.build-and-publish.outputs.tags }}
 
       - name: Deploy to Kubernetes
         if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) || matrix.deploy-every-branch == true
         uses: azure/k8s-deploy@v6.0.0
         with:
           action: deploy
-          manifests: ${{ steps.bake.outputs.manifestsBundle }}
+          manifests: ${{ steps.substitute.outputs.manifests }}
           namespace: ${{ matrix.org }}
