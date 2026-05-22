@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tags: ${{ steps.meta.outputs.tags }}
-      version: ${{ steps.meta.outputs.version }}
     env:
       DOCKER_BUILDKIT: 1
 
@@ -126,5 +125,6 @@ jobs:
         with:
           action: deploy
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
-          images: ghcr.io/${{ toLower(github.repository) }}:${{ needs.build-and-publish.outputs.version }}
+          images: |
+            ${{ needs.build-and-publish.outputs.tags }}
           namespace: ${{ matrix.org }}
