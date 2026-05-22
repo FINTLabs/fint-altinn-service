@@ -56,13 +56,29 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        org: [ bfk-no, ofk-no, mrfylke-no, trondelagfylke-no, agderfk-no ]
+        org:
+          - afk-no
+          - agderfk-no
+          - bfk-no
+          - bym-oslo-kommune-no
+          - ffk-no
+          - innlandetfylke-no
+          - mrfylke-no
+          - ofk-no
+          - rogfk-no
+          - telemarkfylke-no
+          - tromsfylke-no
+          - trondelagfylke-no
+          - vestfoldfylke-no
+          - vlfk-no
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include:
           - cluster: aks-beta-fint-2021-11-23
             deploy-every-branch: true
         exclude:
           - org: mrfylke-no
+            cluster: aks-beta-fint-2021-11-23
+          - org: bym-oslo-kommune-no
             cluster: aks-beta-fint-2021-11-23
 
     steps:
