@@ -139,7 +139,7 @@ public class EbevisConsentAcceptedConsumer {
                                 .dataType(altinnData.getDataType().replace("FileUpload-", ""))
                                 .url(altinnData.getSelfLinks().get("platform"))
                                 .contentType(altinnData.getContentType())
-                                .fileName(altinnData.getFilename())
+                                .fileName(sanitizeFileName(altinnData.getFilename()))
                                 .instance(instance)
                                 .build())
                 .toList();
@@ -154,6 +154,14 @@ public class EbevisConsentAcceptedConsumer {
 
         return Mono.zip(Mono.just(altinnInstance), applicationData);
 
+    }
+
+    private String sanitizeFileName(String fileName) {
+        if (fileName == null) {
+            return null;
+        }
+
+        return fileName.replaceAll("[^A-Za-z0-9øæå _.-]", "");
     }
 
 }
