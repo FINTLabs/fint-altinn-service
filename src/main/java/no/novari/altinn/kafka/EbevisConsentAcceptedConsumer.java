@@ -7,6 +7,7 @@ import no.novari.altinn.altinn.model.AltinnInstance;
 import no.novari.altinn.database.Instance;
 import no.novari.altinn.database.InstanceFile;
 import no.novari.altinn.database.InstanceRepository;
+import no.novari.altinn.util.FilenameSanitizer;
 import no.novari.fint.altinn.model.kafka.KafkaAltinnInstance;
 import no.novari.fint.altinn.model.kafka.KafkaEvidenceConsentAccepted;
 import no.novari.kafka.consuming.*;
@@ -139,7 +140,7 @@ public class EbevisConsentAcceptedConsumer {
                                 .dataType(altinnData.getDataType().replace("FileUpload-", ""))
                                 .url(altinnData.getSelfLinks().get("platform"))
                                 .contentType(altinnData.getContentType())
-                                .fileName(altinnData.getFilename())
+                                .fileName(FilenameSanitizer.sanitize(altinnData.getFilename()))
                                 .instance(instance)
                                 .build())
                 .toList();

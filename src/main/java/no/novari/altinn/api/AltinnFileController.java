@@ -3,6 +3,7 @@ package no.novari.altinn.api;
 import lombok.extern.slf4j.Slf4j;
 import no.novari.altinn.database.InstanceFile;
 import no.novari.altinn.database.InstanceRepository;
+import no.novari.altinn.util.FilenameSanitizer;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -81,7 +82,7 @@ public class AltinnFileController {
                 .bodyToMono(ByteArrayResource.class)
                 .map(resource -> ResponseEntity.ok()
                         .contentType(MediaType.valueOf(file.getContentType()))
-                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + file.getFileName())
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + FilenameSanitizer.sanitizeOrEmpty(file.getFileName()))
                         .body(resource))
                 .onErrorResume(e -> {
                             log.error("Error fetching file", e);

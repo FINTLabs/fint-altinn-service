@@ -77,7 +77,8 @@ jobs:
           - vlfk-no
         cluster: [ aks-beta-fint-2021-11-23, aks-api-fint-2022-02-08 ]
         include:
-          - cluster: aks-beta-fint-2021-11-23
+          - cluster: aks-api-fint-2022-02-08
+            org: bym-oslo-kommune-no
             deploy-every-branch: true
         exclude:
           - org: mrfylke-no
