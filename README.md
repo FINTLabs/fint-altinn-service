@@ -5,7 +5,7 @@ Lots of love from Arkivlaget <3 To be continued.
 ## Depends on
 
 - **[Altinn Ebevis Service](https://github.com/fintlabs/fint-altinn-ebevis-service)**:
-  Handles request for consent as well as retrieval of tax sertificate from Skatteetaten and bankruptcy certificate from
+  Handles request for consent as well as retrieval of tax certificate from Skatteetaten and bankruptcy certificate from
   Brønnøysundregisteret.
 
 - **[FLYT Altinn Gateway](https://github.com/fintlabs/fint-flyt-altinn-gateway)**:
