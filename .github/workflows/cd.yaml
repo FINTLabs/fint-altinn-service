@@ -93,6 +93,11 @@ jobs:
         run: |
           echo "name=$(cut -d\- -f2 <<< ${{ matrix.cluster }})" >> $GITHUB_OUTPUT
 
+      - name: Set image
+        working-directory: kustomize/base
+        run: |
+         kustomize edit set image ghcr.io/${{ github.repository }}=ghcr.io/${{ github.repository }}:${{ needs.build-and-publish.outputs.image }}
+
       - name: Bake manifests with Kustomize
         id: bake
         uses: azure/k8s-bake@v4.1.1
@@ -119,16 +124,9 @@ jobs:
             echo "To deploy, merge to ${{ github.event.repository.default_branch }}." 
           } >> $GITHUB_STEP_SUMMARY
 
-      - name: Substitute image into baked YAML
-        id: substitute
-        uses: azure/k8s-artifact-substitute@v2.0.0
-        with:
-          manifests: ${{ steps.bake.outputs.manifestsBundle }}
-          images: ${{ needs.build-and-publish.outputs.tags }}
-
       - name: Deploy to Kubernetes
         if: github.ref == format('refs/heads/{0}', github.event.repository.default_branch) || matrix.deploy-every-branch == true
-        uses: azure/k8s-deploy@v6.0.0
+        uses: azure/k8s-deploy@v7.0.1
         with:
           action: deploy
           manifests: ${{ steps.substitute.outputs.manifests }}
