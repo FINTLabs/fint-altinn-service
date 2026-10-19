@@ -42,7 +42,7 @@ dependencies {
     implementation 'org.springframework:spring-web'
 
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
-    implementation 'io.netty:netty-resolver-dns-native-macos:4.1.101.Final:osx-aarch_64'
+    implementation 'io.netty:netty-resolver-dns-native-macos:4.2.19.Final:osx-aarch_64'
 
     implementation 'org.springframework.kafka:spring-kafka'
     implementation 'no.novari:kafka:6.0.0'
