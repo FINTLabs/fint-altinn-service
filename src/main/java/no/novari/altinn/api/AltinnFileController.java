@@ -6,6 +6,7 @@ import no.novari.altinn.database.InstanceRepository;
 import no.novari.altinn.util.FilenameSanitizer;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
+import reactor.util.retry.Retry;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,16 +67,28 @@ public class AltinnFileController {
                                                                         @PathVariable String instanceId,
                                                                         @PathVariable String evidenceCodeName) {
 
-        log.info("Getting file for instanceId: {} and dataType: {}", instanceId, evidenceCodeName);
+        String partyInstanceId = partyId.concat("/").concat(instanceId);
+        log.info("Getting file for instanceId: {} and dataType: {}", partyInstanceId, evidenceCodeName);
 
         return ebevisWebClient.get()
                 .uri(String.format("/evidence/file/%s/%s/%s", partyId, instanceId, evidenceCodeName))
                 .retrieve()
                 .bodyToMono(ByteArrayResource.class)
+                .retryWhen(Retry.backoff(3, Duration.ofSeconds(1)))
                 .map(resource -> ResponseEntity.ok()
                         .contentType(MediaType.APPLICATION_PDF)
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=evidence.pdf")
-                        .body(resource));
+                        .body(resource))
+                .onErrorResume(WebClientResponseException.class, e -> {
+                    log.error("Error fetching eBevis file for instanceId: {} and evidenceCodeName: {}, status: {}, response: {}",
+                            partyInstanceId, evidenceCodeName, e.getStatusCode(), e.getResponseBodyAsString(), e);
+                    return Mono.just(ResponseEntity.status(e.getStatusCode()).build());
+                })
+                .onErrorResume(e -> {
+                    log.error("Error fetching eBevis file for instanceId: {} and evidenceCodeName: {}",
+                            partyInstanceId, evidenceCodeName, e);
+                    return Mono.just(ResponseEntity.status(HttpStatus.BAD_GATEWAY).build());
+                });
     }
 
     private Mono<ResponseEntity<ByteArrayResource>> retrieveFile(InstanceFile file) {
@@ -80,12 +96,18 @@ public class AltinnFileController {
                 .uri(file.getUrl())
                 .retrieve()
                 .bodyToMono(ByteArrayResource.class)
+                .retryWhen(Retry.backoff(3, Duration.ofSeconds(1)))
                 .map(resource -> ResponseEntity.ok()
                         .contentType(MediaType.valueOf(file.getContentType()))
                         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + FilenameSanitizer.sanitizeOrEmpty(file.getFileName()))
                         .body(resource))
+                .onErrorResume(WebClientResponseException.class, e -> {
+                    log.error("Error fetching file from Altinn with status: {}, response: {}",
+                            e.getStatusCode(), e.getResponseBodyAsString(), e);
+                    return Mono.just(ResponseEntity.status(e.getStatusCode()).build());
+                })
                 .onErrorResume(e -> {
-                            log.error("Error fetching file", e);
+                            log.error("Error fetching file from Altinn", e);
                             return Mono.just(ResponseEntity.internalServerError().build());
                         }
                 );
