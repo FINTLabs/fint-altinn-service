@@ -31,7 +31,7 @@ spec:
     basePath: path
   env:
     - name: JAVA_TOOL_OPTIONS
-      value: '-XX:+ExitOnOutOfMemoryError -Xmx1840M'
+      value: '-XX:+ExitOnOutOfMemoryError -XX:-UseBASE64Intrinsics -Xmx1840M'
   onePassword:
     itemPath: 'vaults/aks-beta-vault/items/altinn-service'
   resources:
